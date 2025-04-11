@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\RegisterRequest;
 use App\Models\User;
-use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Requests\LoginRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\RegisterRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
-class Auth extends Controller
+class AuthController extends Controller
 {
     public function register(RegisterRequest $request) : JsonResponse
     {
@@ -27,15 +29,34 @@ class Auth extends Controller
         $user->password = Hash::make($data['password']);
         $user->save();
         return response()->json([
-            "message" => "User created successfully"
+            "message" => "User created successfully",
+            "data"    => [
+                "name"  => $data['name'],
+                "username"  => $data['username'],
+                "email"  => $data['email'] ?? '-',
+            ]
         ], 201);
     }
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    
+    public function login(LoginRequest $request) : JsonResponse
     {
-        //
+        $data = $request->validated();
+        if (!Auth::attempt($request->only(['username', 'password']))) {
+            return response()->json([
+                "message" => "Username or password incorrect"
+            ], 400);
+        }
+        $dataUser = User::where('username', $data['username'])->first();
+        $token = $dataUser->createToken('testing');
+        return response()->json([
+            "message"   => "logged in",
+            "data"      => [
+                "id"    => $dataUser->id,
+                "username"=> $dataUser->username,
+                "email" => $dataUser->email ?? '-',
+                "token" => $token->plainTextToken
+            ]
+        ], 200);
     }
 
     /**
