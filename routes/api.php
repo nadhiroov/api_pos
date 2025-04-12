@@ -13,5 +13,4 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/user', [UserController::class, 'index'])->middleware('auth:sanctum');
-// Route::get('/shop', [ShopController::class, 'index'])->middleware('auth:sanctum');
 Route::get('/shop', [ShopController::class, 'search'])->middleware('auth:sanctum');

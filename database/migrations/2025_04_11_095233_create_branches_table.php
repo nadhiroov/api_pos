@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('address');
             $table->string('phone');
-            $table->json('user_id');
+            $table->json('user_id')->nullable(true);
             $table->timestamps();
             $table->softDeletes();
         });
