@@ -26,7 +26,7 @@ class ShopController extends Controller
         $page = $request->input('page', 1);
         $size = $request->input('size', 10);
 
-        $shops = Shop::query()->with('categories', 'branches')->where('user_id', $user->id);
+        $shops = Shop::query()->with('categories', 'branches', 'products')->where('user_id', $user->id);
 
         $shops = $shops->where(function (Builder $builder) use ($request) {
             $name = $request->input('name');

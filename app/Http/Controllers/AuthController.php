@@ -9,6 +9,7 @@ use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
+use App\Models\Role;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AuthController extends Controller
@@ -41,19 +42,27 @@ class AuthController extends Controller
     public function login(LoginRequest $request) : JsonResponse
     {
         $data = $request->validated();
-        if (!Auth::attempt($request->only(['username', 'password']))) {
+        if (!Auth::attempt($data)) {
             return response()->json([
                 "message" => "Username or password incorrect"
-            ], 400);
+            ], 401);
         }
         $dataUser = User::where('username', $data['username'])->first();
-        $token = $dataUser->createToken('testing');
+        $role = Role::join("user_role as ur", "ur.role_id", "=", "roles.id")
+                ->join("users as u", "u.id", "=", "ur.user_id")
+                ->where("user_id", $dataUser->id)
+                ->pluck("roles.role_name")->toArray();
+        if(empty($role)){
+            $role = ["staff"];
+        }
+        $token = $dataUser->createToken('api', $role);
         return response()->json([
             "message"   => "logged in",
             "data"      => [
                 "id"    => $dataUser->id,
                 "username"=> $dataUser->username,
                 "email" => $dataUser->email ?? '-',
+                "role" => $role,
                 "token" => $token->plainTextToken
             ]
         ], 200);
