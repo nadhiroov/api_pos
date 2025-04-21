@@ -34,6 +34,7 @@ class RegisterRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response([
+            "message" => "validation errors",
             "errors" => $validator->getMessageBag()
         ], 400));
     }

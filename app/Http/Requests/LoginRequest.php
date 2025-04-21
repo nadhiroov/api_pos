@@ -25,7 +25,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => ['required','max:50'],
+            'username' => ['required', 'max:50'],
             'password' => ['required', 'max:100'],
         ];
     }
@@ -33,6 +33,7 @@ class LoginRequest extends FormRequest
     protected function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response([
+            "message" => "validation errors",
             "errors" => $validator->getMessageBag()
         ], 400));
     }

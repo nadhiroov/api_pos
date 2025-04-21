@@ -2,23 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
+use App\Models\Branch;
+use App\Models\Shop;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\LoginRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
-use App\Models\Role;
 use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AuthController extends Controller
 {
-    public function register(RegisterRequest $request) : JsonResponse
+    public function register(RegisterRequest $request): JsonResponse
     {
         $data = $request->validated();
         if (User::where('username', $data['username'])->count() == 1) {
             throw new HttpResponseException(response([
+                "message" => "validation errors",
                 "errors" => [
                     "username" => [
                         "username already registered"
@@ -38,8 +41,8 @@ class AuthController extends Controller
             ]
         ], 201);
     }
-    
-    public function login(LoginRequest $request) : JsonResponse
+
+    public function login(LoginRequest $request): JsonResponse
     {
         $data = $request->validated();
         if (!Auth::attempt($data)) {
@@ -49,21 +52,33 @@ class AuthController extends Controller
         }
         $dataUser = User::where('username', $data['username'])->first();
         $role = Role::join("user_role as ur", "ur.role_id", "=", "roles.id")
-                ->join("users as u", "u.id", "=", "ur.user_id")
-                ->where("user_id", $dataUser->id)
-                ->pluck("roles.role_name")->toArray();
-        if(empty($role)){
-            $role = ["staff"];
+            ->join("users as u", "u.id", "=", "ur.user_id")
+            ->where("user_id", $dataUser->id)
+            ->pluck("roles.role_name")->toArray();
+        if (empty($role)) {
+            $role = ["cashier"];
         }
+        $rolesCollect = collect($role);
+        if ($rolesCollect->contains("owner")) {
+            // $branches = Shop::query()->with('branches')->where('user_id', $dataUser->id)->get();
+            // $branches = Branch::query()->
+            // $branches = Branch::whereIn('shop_id', Shop::where('user_id', $dataUser->id)->pluck('id'))->get();
+            $branches = Branch::whereIn('shop_id', Shop::where('user_id', $dataUser->id)->pluck('id'))
+                ->select('id', 'name')->get();
+        } elseif ($rolesCollect->contains("cashier")) {
+            $branches = Branch::whereJsonContains('user_id', $dataUser->id)->get();
+        }
+
         $token = $dataUser->createToken('api', $role);
         return response()->json([
             "message"   => "logged in",
             "data"      => [
-                "id"    => $dataUser->id,
-                "username"=> $dataUser->username,
-                "email" => $dataUser->email ?? '-',
-                "role" => $role,
-                "token" => $token->plainTextToken
+                "id"        => $dataUser->id,
+                "username"  => $dataUser->username,
+                "email"     => $dataUser->email ?? '-',
+                "role"      => $role,
+                "branches"  => $branches ?? '-',
+                "token"     => $token->plainTextToken
             ]
         ], 200);
     }
