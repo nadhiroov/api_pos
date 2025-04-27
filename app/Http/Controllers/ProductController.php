@@ -2,17 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ProductCollection;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        Auth::user();
+        $page = $request->input('page', 1);
+        $size = $request->input('size', 10);
+
+        $branch_id = $request->input('branch_id');
+        $product = Product::query()->with('categories', 'branches')->where('branch_id', $branch_id);
+        $products = $product->paginate(perPage: $size, page: $page);
+        return new ProductCollection($products);
     }
 
     /**

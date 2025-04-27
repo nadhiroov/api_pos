@@ -12,9 +12,11 @@ class Product extends Model
     use HasFactory, SoftDeletes;
     protected $guarded = [];
 
-    function category() : BelongsTo {
-        return $this->belongsTo(Category::class);
+    function categories() : BelongsTo {
+        return $this->belongsTo(Category::class, 'category_id');
     }
 
-    
+    function branches() : BelongsTo {
+        return $this->belongsTo(Branch::class, 'branch_id');
+    }
 }
