@@ -213,14 +213,10 @@
             let formData = new FormData(this);
             $.ajax({
                 url: `/category/${formData.get('id')}`,
-                type: "PUT",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    "name": formData.get('name')
-                },
+                type: "POST",
+                data: formData,
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                    'X-Requested-With': 'XMLHttpRequest'
                 },
                 processData: false,
                 contentType: false,

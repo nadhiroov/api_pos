@@ -25,6 +25,7 @@ Route::middleware(isLogin::class)->group(
         // Route::get('/category/edit/{id}', [CategoryWeb::class, 'getData']);
         Route::get('/category/add', [CategoryWeb::class, 'add']);
         Route::get('/category/{id}/edit', [CategoryWeb::class, 'edit']);
+        Route::post('/category/{id}', [CategoryWeb::class, 'update']);
         // Route::post('/category/store', [CategoryWeb::class, 'store']);
     }
 );

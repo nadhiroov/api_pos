@@ -38,7 +38,6 @@ class CategoryWeb extends Controller
             // ->addIndexColumn()
             ->addColumn('action', function ($category) {
                 $btn = '<div class="d-flex align-items-center gap-2">';
-                // $btn .= '<a href="' . route('category.edit', $category->id) . '" class="btn bg-warning-subtle text-warning"><i class="ti ti-edit fs-4 me-2"></i></a>';
                 $btn .= '<button data-bs-toggle="modal" data-bs-target="#edit" data-id="' . $category->id . '" class="btn bg-warning-subtle text-warning"><i class="ti ti-edit fs-4 me-2"></i></button>';
                 $btn .= '<a onclick="confirmDelete(this)" class="btn bg-danger-subtle text-danger" data-id="' . $category->id . '"><i class="ti ti-trash fs-4 me-2"></i></a>';
                 $btn .= '</div>';
@@ -135,7 +134,7 @@ class CategoryWeb extends Controller
             'name' => $data['name']
         ];
         $product = new Category($saveData);
-        $product->where('id', $id)->update($data);
+        $product->where('id', $id)->update($saveData);
         return response()->json([
             'status'  => 'Success',
             'message' => 'Data saved'
