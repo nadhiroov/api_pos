@@ -15,6 +15,7 @@
 
     <title>@yield('title')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    @yield('css')
 </head>
 
 <body class="link-sidebar">
@@ -1043,6 +1044,7 @@
     <!-- solar icons -->
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
     <script src="../assets/js/plugins/animation-init.js"></script>
+    @yield('script')
 </body>
 
 </html>

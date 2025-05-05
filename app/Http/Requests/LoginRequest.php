@@ -2,10 +2,12 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
 // use Illuminate\Http\Request;
+
 
 class LoginRequest extends FormRequest
 {
@@ -25,16 +27,30 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'username' => ['required', 'max:50'],
+            'username' => ['required', 'max:50', 'min:3'],
             'password' => ['required', 'max:100'],
         ];
     }
 
     protected function failedValidation(Validator $validator)
     {
-        throw new HttpResponseException(response([
-            "message" => "validation errors",
-            "errors" => $validator->getMessageBag()
-        ], 400));
+        if ($this->isApiRequest()) {
+            throw new HttpResponseException(
+                response()->json([
+                    "message" => "Validation errors",
+                    "errors" => $validator->errors()
+                ],400)
+            );
+        }
+
+        parent::failedValidation($validator);
+    }
+
+    protected function isApiRequest(): bool
+    {
+        // Cek apakah route saat ini adalah route API
+        return Route::is('api.*') ||
+            str_starts_with($this->path(), 'api/') ||
+            $this->wantsJson();
     }
 }

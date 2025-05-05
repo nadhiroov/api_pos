@@ -26,11 +26,27 @@
             <!-- Dashboard -->
             <!-- ---------------------------------- -->
             <li class="sidebar-item">
-              <a class="sidebar-link" href="" id="get-url" aria-expanded="false">
+              <a class="sidebar-link" href="/dashboard" id="get-url" aria-expanded="false">
                 <span>
                   <i class="ti ti-aperture"></i>
                 </span>
-                <span class="hide-menu">Modern</span>
+                <span class="hide-menu">Dashboard</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/shop" id="get-url" aria-expanded="false">
+                <span>
+                  <i class="ti ti-aperture"></i>
+                </span>
+                <span class="hide-menu">Shop Setting</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/category" id="get-url" aria-expanded="false">
+                <span>
+                  <i class="ti ti-aperture"></i>
+                </span>
+                <span class="hide-menu">Category</span>
               </a>
             </li>
             
@@ -39,7 +55,7 @@
                 <span class="d-flex">
                   <i class="ti ti-chart-donut-3"></i>
                 </span>
-                <span class="hide-menu">Blog</span>
+                <span class="hide-menu">Merchant</span>
               </a>
               <ul aria-expanded="false" class="collapse first-level">
                 <li class="sidebar-item">
@@ -47,7 +63,7 @@
                     <div class="round-16 d-flex align-items-center justify-content-center">
                       <i class="ti ti-circle"></i>
                     </div>
-                    <span class="hide-menu">Posts</span>
+                    <span class="hide-menu">My merchants</span>
                   </a>
                 </li>
                 <li class="sidebar-item">
@@ -55,7 +71,7 @@
                     <div class="round-16 d-flex align-items-center justify-content-center">
                       <i class="ti ti-circle"></i>
                     </div>
-                    <span class="hide-menu">Details</span>
+                    <span class="hide-menu">Products</span>
                   </a>
                 </li>
               </ul>
@@ -69,12 +85,13 @@
               <img src="{{ asset('assets/images/profile/user-1.jpg') }}" class="rounded-circle" width="40" height="40" alt="modernize-img" />
             </div>
             <div class="john-title">
-              <h6 class="mb-0 fs-4 fw-semibold">Mathew</h6>
+              <h6 class="mb-0 fs-4 fw-semibold">{{ auth()->user()->name }}</h6>
               <span class="fs-2">Designer</span>
             </div>
-            <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
+            <a href="/logout" class="border-0 bg-transparent text-primary ms-auto" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout"><i class="ti ti-power fs-6"></i></a>
+            {{-- <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
               <i class="ti ti-power fs-6"></i>
-            </button>
+            </button> --}}
           </div>
         </div>
       </div>

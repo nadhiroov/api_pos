@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
 use App\Models\Role;
+use App\Models\Shop;
 use App\Models\User;
 use App\Models\Branch;
-use App\Models\Shop;
 use Illuminate\Http\Request;
+use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use App\Http\Requests\LoginRequest;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\RegisterRequest;
@@ -16,6 +18,10 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class AuthController extends Controller
 {
+    public function __construct(
+        protected AuthService $authService,
+    ) {}
+
     public function register(RegisterRequest $request): JsonResponse
     {
         $data = $request->validated();
@@ -45,7 +51,28 @@ class AuthController extends Controller
     public function login(LoginRequest $request): JsonResponse
     {
         $data = $request->validated();
-        if (!Auth::attempt($data)) {
+        $data = $this->authService->login($data);
+        if ($data['status']) {
+            $token = $data['dataUser']->createToken("api", $data["dataUser"]["role"]);
+            return response()->json([
+                "message"   => "logged in",
+                "data"      => [
+                    "id"        => $data["dataUser"]["id"],
+                    "username"  => $data["dataUser"]["username"],
+                    "email"     => $data["dataUser"]["email"] ?? '-',
+                    "role"      => $data["dataUser"]["role"],
+                    "branches"  => $data["dataUser"]["branches"] ?? '-',
+                    "token"     => $token->plainTextToken
+                ]
+            ], 200);
+        } else {
+            return response()->json([
+                'message'   => $data['message']
+            ], $data['http']);
+        }
+    }
+
+    /* if (!Auth::attempt($data)) {
             return response()->json([
                 "message" => "Username or password incorrect"
             ], 401);
@@ -60,74 +87,9 @@ class AuthController extends Controller
         }
         $rolesCollect = collect($role);
         if ($rolesCollect->contains("owner")) {
-            // $branches = Shop::query()->with('branches')->where('user_id', $dataUser->id)->get();
-            // $branches = Branch::query()->
-            // $branches = Branch::whereIn('shop_id', Shop::where('user_id', $dataUser->id)->pluck('id'))->get();
             $branches = Branch::whereIn('shop_id', Shop::where('user_id', $dataUser->id)->pluck('id'))
                 ->select('id', 'name')->get();
         } elseif ($rolesCollect->contains("cashier")) {
             $branches = Branch::whereJsonContains('user_id', $dataUser->id)->get();
-        }
-
-        $token = $dataUser->createToken('api', $role);
-        return response()->json([
-            "message"   => "logged in",
-            "data"      => [
-                "id"        => $dataUser->id,
-                "username"  => $dataUser->username,
-                "email"     => $dataUser->email ?? '-',
-                "role"      => $role,
-                "branches"  => $branches ?? '-',
-                "token"     => $token->plainTextToken
-            ]
-        ], 200);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(User $user)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, User $user)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user)
-    {
-        //
-    }
+        } */
 }
