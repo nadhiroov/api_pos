@@ -20,7 +20,7 @@ class ProductController extends Controller
         $size = $request->input('size', 10);
 
         $branch_id = $request->input('branch_id');
-        $product = Product::query()->with('categories', 'branches')->where('branch_id', $branch_id);
+        $product = Product::query()->with('category', 'branch')->where('branch_id', $branch_id);
         $products = $product->paginate(perPage: $size, page: $page);
         return new ProductCollection($products);
     }

@@ -1,10 +1,8 @@
 @extends('layouts.app')
-
 @section('title', 'Home Page')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.css') }}">
 @endsection
 
 @section('content')
@@ -19,55 +17,104 @@
                                 <li class="breadcrumb-item">
                                     <a class="text-muted text-decoration-none" href="/">Dashboard</a>
                                 </li>
+                                <li class="breadcrumb-item">
+                                    <a class="text-muted text-decoration-none" href="/merchant">Merchant</a>
+                                </li>
                                 <li class="breadcrumb-item" aria-current="page">{{ $title }}</li>
                             </ol>
                         </nav>
                     </div>
                     <div class="col-3">
                         <div class="text-center mb-n5">
-                            <img src="../assets/images/breadcrumb/ChatBc.png" alt="modernize-img" class="img-fluid mb-n4" />
+                            <img src="{{ asset('assets/images/breadcrumb/ChatBc.png') }}" alt="modernize-img"
+                                class="img-fluid mb-n4" />
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex align-items-center justify-content-between mb-4 pb-8">
-                    <h4 class="card-title">Categories</h4>
-                    <div class="d-flex">
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_new">Add new</button>
+        <div class="row">
+            <div class="col-md-6 col-lg-4 d-flex align-items-stretch">
+                <div class="card w-100">
+                    <div class="card-body">
+                        <div class="mb-4">
+                            <h4 class="card-title fw-semibold">{{ $title }}</h4>
+                        </div>
+                        <ul class="timeline-widget mb-0 position-relative mb-n5">
+                            <div class="mb-3 row">
+                                <label for="example-text-input" class="col-md-4 col-form-label">Merchant name</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" type="text" value="{{ $branch->name }}"
+                                        id="example-text-input" disabled>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="example-text-input" class="col-md-4 col-form-label">Address</label>
+                                <div class="col-md-8">
+                                    <textarea name="" class="form-control" rows="4" disabled>{{ $branch->address }}</textarea>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="example-text-input" class="col-md-4 col-form-label">Phone</label>
+                                <div class="col-md-8">
+                                    <input class="form-control" type="text" value="{{ $branch->phone }}"
+                                        id="example-text-input" disabled>
+                                </div>
+                            </div>
+                        </ul>
                     </div>
                 </div>
-                <br>
-                <div class="table-responsive">
-                    <table id="datatable" class="table table-striped table-bordered text-nowrap align-middle">
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+            </div>
+
+            <div class="col-md-12 col-lg-8 d-flex align-items-stretch">
+                <div class="card w-100">
+                    <div class="card-body">
+                        <div class="d-sm-flex d-block align-items-center justify-content-between mb-3">
+                            <div class="mb-3 mb-sm-0">
+                                <h4 class="card-title fw-semibold">Product</h4>
+                                {{-- <p class="card-subtitle">What Impacts Product Performance?</p> --}}
+                            </div>
+                            <div>
+                                {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_new">Add
+                                    new</button> --}}
+                                <a href="/product/add" class="btn btn-primary">Add new</a>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="datatable" class="table table-striped table-bordered text-nowrap align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Name</th>
+                                        <th>Stock</th>
+                                        <th>Price</th>
+                                        <th>Branch</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     {{-- modal add new --}}
     <div class="modal fade" id="add_new" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
         style="display: none;">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <form action="/category" method="POST" class="form-process-add">
+                <form action="/merchant" method="POST" class="form-process-add">
                     <div class="modal-header d-flex align-items-center">
                         <h4 class="modal-title" id="myModalLabel">
-                            Add new data
+                            Add new data {{ strtolower($title) }}
                         </h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body category-body-add">
+                    <div class="modal-body modal-body-add">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn bg-danger-subtle text-danger  waves-effect"
@@ -86,7 +133,7 @@
     {{-- modal edit --}}
     <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
         style="display: none;">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <form action="/category" method="PATCH" class="form-process-edit">
                     <div class="modal-header d-flex align-items-center">
@@ -95,7 +142,7 @@
                         </h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body category-body-edit">
+                    <div class="modal-body modal-body-edit">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn bg-danger-subtle text-danger  waves-effect"
@@ -113,24 +160,39 @@
     </div>
 @endsection
 
-
 @section('script')
     <script src="{{ asset('assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/toastr-init.js') }}"></script>
     <script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('#datatable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '/category/data',
+                    url: '/product/data?branch_id={{ $branch->id }}',
                     type: 'GET'
                 },
-                columns: [
+                columns: [{
+                        data: 'image',
+                        name: 'image'
+                    },
                     {
                         data: 'name',
                         name: 'name'
+                    },
+                    {
+                        data: 'stock',
+                        name: 'stock'
+                    },
+                    {
+                        data: 'price_formatted',
+                        name: 'price_formatted'
+                    },
+                    {
+                        data: 'branch_name',
+                        name: 'branch_name'
                     },
                     {
                         data: 'action',
@@ -143,15 +205,15 @@
                     width: '20%',
                     targets: 1
                 }]
-            })
-        })
+            });
+        });
 
         $('#add_new').on('show.bs.modal', function(e) {
             $.ajax({
                 type: 'get',
-                url: '/category/add',
+                url: '/product/add',
                 success: function(data) {
-                    $('.category-body-add').html(data);
+                    $('.modal-body-add').html(data);
                 }
             })
         })
@@ -160,9 +222,9 @@
             let id = $(e.relatedTarget).data('id')
             $.ajax({
                 type: 'get',
-                url: `/category/${id}/edit`,
+                url: `/merchant/${id}/edit`,
                 success: function(data) {
-                    $('.category-body-edit').html(data);
+                    $('.modal-body-edit').html(data);
                 }
             })
         })
@@ -171,7 +233,7 @@
             e.preventDefault()
             let formData = new FormData(this);
             $.ajax({
-                url: '/category',
+                url: '/merchant',
                 type: "post",
                 data: formData,
                 processData: false,
@@ -197,7 +259,7 @@
             e.preventDefault()
             let formData = new FormData(this);
             $.ajax({
-                url: `/category/${formData.get('id')}`,
+                url: `/merchant/${formData.get('id')}`,
                 type: "POST",
                 data: formData,
                 headers: {
@@ -235,7 +297,7 @@
             }).then((result) => {
                 if (result.value) {
                     $.ajax({
-                        url: `/category/${id}`,
+                        url: `/merchant/${id}`,
                         type: "DELETE",
                         data: {
                             _token: "{{ csrf_token() }}",

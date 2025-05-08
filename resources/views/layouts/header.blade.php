@@ -18,8 +18,8 @@
                 </a>
             </div>
             <a class="navbar-toggler nav-icon-hover-bg rounded-circle p-0 mx-0 border-0" href="javascript:void(0)"
-                data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav"
-                aria-expanded="false" aria-label="Toggle navigation">
+                data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation">
                 <i class="ti ti-dots fs-7"></i>
             </a>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
@@ -59,7 +59,7 @@
                                     <a href="javascript:void(0)"
                                         class="py-6 px-7 d-flex align-items-center dropdown-item">
                                         <span class="me-3">
-                                            <img src="../assets/images/profile/user-2.jpg" alt="user"
+                                            <img src="{{asset('assets/images/profile/user-2.jpg')}}" alt="user"
                                                 class="rounded-circle" width="48" height="48" />
                                         </span>
                                         <div class="w-100">
@@ -70,7 +70,7 @@
                                     <a href="javascript:void(0)"
                                         class="py-6 px-7 d-flex align-items-center dropdown-item">
                                         <span class="me-3">
-                                            <img src="../assets/images/profile/user-3.jpg" alt="user"
+                                            <img src="{{asset('assets/images/profile/user-3.jpg')}}" alt="user"
                                                 class="rounded-circle" width="48" height="48" />
                                         </span>
                                         <div class="w-100">
@@ -82,7 +82,7 @@
                                     <a href="javascript:void(0)"
                                         class="py-6 px-7 d-flex align-items-center dropdown-item">
                                         <span class="me-3">
-                                            <img src="../assets/images/profile/user-4.jpg" alt="user"
+                                            <img src="{{asset('assets/images/profile/user-4.jpg')}}" alt="user"
                                                 class="rounded-circle" width="48" height="48" />
                                         </span>
                                         <div class="w-100">
@@ -93,7 +93,7 @@
                                     <a href="javascript:void(0)"
                                         class="py-6 px-7 d-flex align-items-center dropdown-item">
                                         <span class="me-3">
-                                            <img src="../assets/images/profile/user-5.jpg" alt="user"
+                                            <img src="{{asset('assets/images/profile/user-5.jpg')}}" alt="user"
                                                 class="rounded-circle" width="48" height="48" />
                                         </span>
                                         <div class="w-100">
@@ -104,7 +104,7 @@
                                     <a href="javascript:void(0)"
                                         class="py-6 px-7 d-flex align-items-center dropdown-item">
                                         <span class="me-3">
-                                            <img src="../assets/images/profile/user-6.jpg" alt="user"
+                                            <img src="{{asset('assets/images/profile/user-6.jpg')}}" alt="user"
                                                 class="rounded-circle" width="48" height="48" />
                                         </span>
                                         <div class="w-100">
@@ -116,7 +116,7 @@
                                     <a href="javascript:void(0)"
                                         class="py-6 px-7 d-flex align-items-center dropdown-item">
                                         <span class="me-3">
-                                            <img src="../assets/images/profile/user-7.jpg" alt="user"
+                                            <img src="{{asset('assets/images/profile/user-7.jpg')}}" alt="user"
                                                 class="rounded-circle" width="48" height="48" />
                                         </span>
                                         <div class="w-100">
@@ -141,8 +141,8 @@
                             <a class="nav-link pe-0" href="javascript:void(0)" id="drop1" aria-expanded="false">
                                 <div class="d-flex align-items-center">
                                     <div class="user-profile-img">
-                                        <img src="../assets/images/profile/user-1.jpg" class="rounded-circle"
-                                            width="35" height="35" alt="modernize-img" />
+                                        <img src="{{ asset('assets/images/profile/user-1.jpg') }}"
+                                            class="rounded-circle" width="35" height="35" alt="modernize-img" />
                                     </div>
                                 </div>
                             </a>
@@ -153,8 +153,8 @@
                                         <h5 class="mb-0 fs-5 fw-semibold">User Profile</h5>
                                     </div>
                                     <div class="d-flex align-items-center py-9 mx-7 border-bottom">
-                                        <img src="../assets/images/profile/user-1.jpg" class="rounded-circle"
-                                            width="80" height="80" alt="modernize-img" />
+                                        <img src="{{ asset('assets/images/profile/user-1.jpg') }}"
+                                            class="rounded-circle" width="80" height="80" alt="modernize-img" />
                                         <div class="ms-3">
                                             <h5 class="mb-1 fs-3">{{ auth()->user()->name }}</h5>
                                             {{-- <span class="mb-1 d-block">Designer</span> --}}
@@ -168,8 +168,8 @@
                                             class="py-8 px-7 mt-8 d-flex align-items-center">
                                             <span
                                                 class="d-flex align-items-center justify-content-center text-bg-light rounded-1 p-6">
-                                                <img src="../assets/images/svgs/icon-account.svg" alt="modernize-img"
-                                                    width="24" height="24" />
+                                                <img src="{{ asset('assets/images/svgs/icon-account.svg') }}"
+                                                    alt="modernize-img" width="24" height="24" />
                                             </span>
                                             <div class="w-100 ps-3">
                                                 <h6 class="mb-1 fs-3 fw-semibold lh-base">My Profile</h6>
@@ -187,14 +187,13 @@
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="m-n4 unlimited-img">
-                                                        <img src="../assets/images/backgrounds/unlimited-bg.png"
+                                                        <img src="{{ asset('assets/images/backgrounds/unlimited-bg.png') }}"
                                                             alt="modernize-img" class="w-100" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <a href="/logout"
-                                            class="btn btn-outline-primary">Log Out</a>
+                                        <a href="/logout" class="btn btn-outline-primary">Log Out</a>
                                     </div>
                                 </div>
                             </div>
@@ -233,7 +232,8 @@
             </ul>
             <div class="d-block d-xl-none">
                 <a href="../main/index.html" class="text-nowrap nav-link">
-                    <img src="{{ asset('assets/images/logos/dark-logo.svg') }}" width="180" alt="modernize-img" />
+                    <img src="{{ asset('assets/images/logos/dark-logo.svg') }}" width="180"
+                        alt="modernize-img" />
                 </a>
             </div>
             <a class="navbar-toggler nav-icon-hover-bg rounded-circle p-0 mx-0 border-0" href="javascript:void(0)"
@@ -280,7 +280,7 @@
                                     <a href="javascript:void(0)"
                                         class="py-6 px-7 d-flex align-items-center dropdown-item">
                                         <span class="me-3">
-                                            <img src="../assets/images/profile/user-2.jpg" alt="user"
+                                            <img src="{{asset('assets/images/profile/user-2.jpg')}}" alt="user"
                                                 class="rounded-circle" width="48" height="48" />
                                         </span>
                                         <div class="w-100">
@@ -291,7 +291,7 @@
                                     <a href="javascript:void(0)"
                                         class="py-6 px-7 d-flex align-items-center dropdown-item">
                                         <span class="me-3">
-                                            <img src="../assets/images/profile/user-3.jpg" alt="user"
+                                            <img src="{{asset('assets/images/profile/user-3.jpg')}}" alt="user"
                                                 class="rounded-circle" width="48" height="48" />
                                         </span>
                                         <div class="w-100">
@@ -303,7 +303,7 @@
                                     <a href="javascript:void(0)"
                                         class="py-6 px-7 d-flex align-items-center dropdown-item">
                                         <span class="me-3">
-                                            <img src="../assets/images/profile/user-4.jpg" alt="user"
+                                            <img src="{{asset('assets/images/profile/user-4.jpg')}}" alt="user"
                                                 class="rounded-circle" width="48" height="48" />
                                         </span>
                                         <div class="w-100">
@@ -314,7 +314,7 @@
                                     <a href="javascript:void(0)"
                                         class="py-6 px-7 d-flex align-items-center dropdown-item">
                                         <span class="me-3">
-                                            <img src="../assets/images/profile/user-5.jpg" alt="user"
+                                            <img src="{{asset('assets/images/profile/user-5.jpg')}}" alt="user"
                                                 class="rounded-circle" width="48" height="48" />
                                         </span>
                                         <div class="w-100">
@@ -325,7 +325,7 @@
                                     <a href="javascript:void(0)"
                                         class="py-6 px-7 d-flex align-items-center dropdown-item">
                                         <span class="me-3">
-                                            <img src="../assets/images/profile/user-6.jpg" alt="user"
+                                            <img src="{{asset('assets/images/profile/user-6.jpg')}}" alt="user"
                                                 class="rounded-circle" width="48" height="48" />
                                         </span>
                                         <div class="w-100">
@@ -337,7 +337,7 @@
                                     <a href="javascript:void(0)"
                                         class="py-6 px-7 d-flex align-items-center dropdown-item">
                                         <span class="me-3">
-                                            <img src="../assets/images/profile/user-7.jpg" alt="user"
+                                            <img src="{{asset('assets/images/profile/user-7.jpg')}}" alt="user"
                                                 class="rounded-circle" width="48" height="48" />
                                         </span>
                                         <div class="w-100">
@@ -362,8 +362,9 @@
                             <a class="nav-link pe-0" href="javascript:void(0)" id="drop1" aria-expanded="false">
                                 <div class="d-flex align-items-center">
                                     <div class="user-profile-img">
-                                        <img src="../assets/images/profile/user-1.jpg" class="rounded-circle"
-                                            width="35" height="35" alt="modernize-img" />
+                                        <img src="{{ asset('assets/images/profile/user-1.jpg') }}"
+                                            class="rounded-circle" width="35" height="35"
+                                            alt="modernize-img" />
                                     </div>
                                 </div>
                             </a>
@@ -374,8 +375,9 @@
                                         <h5 class="mb-0 fs-5 fw-semibold">User Profile</h5>
                                     </div>
                                     <div class="d-flex align-items-center py-9 mx-7 border-bottom">
-                                        <img src="../assets/images/profile/user-1.jpg" class="rounded-circle"
-                                            width="80" height="80" alt="modernize-img" />
+                                        <img src="{{ asset('assets/images/profile/user-1.jpg') }}"
+                                            class="rounded-circle" width="80" height="80"
+                                            alt="modernize-img" />
                                         <div class="ms-3">
                                             <h5 class="mb-1 fs-3">Mathew Anderson</h5>
                                             <span class="mb-1 d-block">Designer</span>
@@ -389,8 +391,8 @@
                                             class="py-8 px-7 mt-8 d-flex align-items-center">
                                             <span
                                                 class="d-flex align-items-center justify-content-center text-bg-light rounded-1 p-6">
-                                                <img src="../assets/images/svgs/icon-account.svg" alt="modernize-img"
-                                                    width="24" height="24" />
+                                                <img src="{{ asset('assets/images/svgs/icon-account.svg') }}"
+                                                    alt="modernize-img" width="24" height="24" />
                                             </span>
                                             <div class="w-100 ps-3">
                                                 <h6 class="mb-1 fs-3 fw-semibold lh-base">My Profile</h6>
@@ -408,7 +410,7 @@
                                                 </div>
                                                 <div class="col-6">
                                                     <div class="m-n4 unlimited-img">
-                                                        <img src="../assets/images/backgrounds/unlimited-bg.png"
+                                                        <img src="{{ asset('assets/images/backgrounds/unlimited-bg.png') }}"
                                                             alt="modernize-img" class="w-100" />
                                                     </div>
                                                 </div>

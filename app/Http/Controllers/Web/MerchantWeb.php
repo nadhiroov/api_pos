@@ -2,49 +2,70 @@
 
 namespace App\Http\Controllers\Web;
 
-use App\Models\Shop;
-use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Branch;
+use App\Models\Shop;
 use Illuminate\Support\Facades\Auth;
+use League\CommonMark\Delimiter\Bracket;
 use Yajra\DataTables\Facades\DataTables;
 
-class CategoryWeb extends Controller
+class MerchantWeb extends Controller
 {
     protected $title;
     public function __construct()
     {
-        $this->title = 'Category';
+        $this->title = 'Merchant';
     }
+
     public function index()
     {
-        return view('category.index', [
+        return view('merchant.index', [
             'title' => $this->title,
+        ]);
+    }
+
+    public function add()
+    {
+        return view('merchant.add');
+    }
+
+    function edit(int $id)
+    {
+        Auth::user();
+        $branch = Branch::where('id', $id)->first();
+        return view('merchant.edit', ['data' => $branch]);
+    }
+
+    function detail($id)
+    {
+        Auth::user();
+        $branch = Branch::where('id', $id)->first();
+        return view('merchant.detail', [
+            'title' => 'Detail merchant',
+            'branch' => $branch,
+            'data'  => Branch::where('id', $id)->first()
         ]);
     }
 
     public function show(Request $request)
     {
         $user = Auth::user();
-
-        $categories = Category::query()
+        $branches = Branch::query()
             ->whereHas('shop', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })
             ->with('shop');
-
-        return DataTables::of($categories)
-            // ->addIndexColumn()
-            ->addColumn('action', function ($category) {
+        return DataTables::of($branches)
+            ->addColumn('action', function ($branch) {
                 $btn = '<div class="d-flex align-items-center gap-2">';
-                $btn .= '<button data-bs-toggle="modal" data-bs-target="#edit" data-id="' . $category->id . '" class="btn bg-warning-subtle text-warning"><i class="ti ti-edit fs-4 me-2"></i></button>';
-                $btn .= '<a onclick="confirmDelete(this)" class="btn bg-danger-subtle text-danger" data-id="' . $category->id . '"><i class="ti ti-trash fs-4 me-2"></i></a>';
+                $btn .= '<a href="' . route('merchant.detail', $branch->id) . '" class="btn bg-info-subtle text-info"><i class="ti ti-zoom-exclamation fs-4 me-2"></i></a>';
+                $btn .= '<button data-bs-toggle="modal" data-bs-target="#edit" data-id="' . $branch->id . '" class="btn bg-warning-subtle text-warning"><i class="ti ti-edit fs-4 me-2"></i></button>';
+                $btn .= '<a onclick="confirmDelete(this)" class="btn bg-danger-subtle text-danger" data-id="' . $branch->id . '"><i class="ti ti-trash fs-4 me-2"></i></a>';
                 $btn .= '</div>';
                 return $btn;
             })
-            ->addColumn('name', function ($category) {
-                return $category->name;
-            })
+            // <a href="' . route('product.show', $product->id) . '" class="btn bg-info-subtle text-info"><i class="ti ti-zoom-exclamation fs-4 me-2"></i></a>
             ->filter(function ($query) use ($request) {
                 // Handle search
                 if ($request->has('search') && !empty($request->search['value'])) {
@@ -80,9 +101,9 @@ class CategoryWeb extends Controller
 
                     // Handle ordering for related columns
                     if ($column == 'shop.name') {
-                        $query->join('shops', 'categories.shop_id', '=', 'shops.id')
+                        $query->join('shops', 'branches.shop_id', '=', 'shop.id')
                             ->orderBy('shops.name', $order['dir'])
-                            ->select('categories.*');
+                            ->select('branches.*');
                     } else {
                         $query->orderBy($column, $order['dir']);
                     }
@@ -92,30 +113,22 @@ class CategoryWeb extends Controller
             ->toJson();
     }
 
-    public function add()
-    {
-        return view('category.add');
-    }
-
-    function edit(int $id)
-    {
-        Auth::user();
-        $category = Category::where('id', $id)->first();
-        return view('category.edit', ['data' => $category]);
-    }
-
     public function store(Request $request)
     {
         $user = Auth::user();
         $data = $request->validate([
-            'name' => ['required']
+            'name' => ['required'],
+            'address' => ['nullable'],
+            'phone' => ['nullable'],
         ]);
         $shop = Shop::where('user_id', $user->id)->first();
         $saveData = [
-            'name' => $data['name'],
-            'shop_id'  => $shop->id
+            'shop_id'  => $shop->id,
+            'name'     => $data['name'],
+            'address'  => $data['address'] ?? null,
+            'phone'    => $data['phone'] ?? null,
         ];
-        $category = new Category($saveData);
+        $category = new Branch($saveData);
         $category->save();
         return response()->json([
             'status'  => 'Success',
@@ -127,13 +140,18 @@ class CategoryWeb extends Controller
     {
         Auth::user();
         $data = $request->validate([
-            'name' => ['required']
+            'name' => ['required'],
+            'address' => ['nullable'],
+            'phone' => ['nullable'],
         ]);
         $saveData = [
-            'name' => $data['name']
+            'name'     => $data['name'],
+            'name'     => $data['name'],
+            'address'  => $data['address'] ?? null,
+            'phone'    => $data['phone'] ?? null,
         ];
-        $product = new Category($saveData);
-        $product->where('id', $id)->update($saveData);
+        $branch = new Branch($saveData);
+        $branch->where('id', $id)->update($saveData);
         return response()->json([
             'status'  => 'Success',
             'message' => 'Data saved'
@@ -143,8 +161,8 @@ class CategoryWeb extends Controller
     public function destroy(int $id)
     {
         Auth::user();
-        $category = Category::where('id', $id)->first();
-        if (!$category) {
+        $branch = Branch::where('id', $id)->first();
+        if (!$branch) {
             return response()->json([
                 'status'  => 'Error',
                 'message' => 'Data not found'
@@ -152,7 +170,7 @@ class CategoryWeb extends Controller
         }
 
         try {
-            $category->delete();
+            $branch->delete();
             return response()->json([
                 'status'  => 'Success',
                 'message' => 'Data deleted'

@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Middleware\isLogin;
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\AuthWeb;
-use App\Http\Controllers\Web\CategoryWeb;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Web\Dashboard;
+use App\Http\Controllers\Web\CategoryWeb;
+use App\Http\Controllers\Web\MerchantWeb;
+use App\Http\Controllers\Web\ProductWeb;
 
 Route::get('/login', [AuthWeb::class, 'loginPage']);
 Route::get('/register', function () {
@@ -20,14 +22,28 @@ Route::middleware(isLogin::class)->group(
     function () {
         Route::get('/', [Dashboard::class, 'dashboard']);
         Route::get('/dashboard', [Dashboard::class, 'dashboard']);
-        // Route::get('/category', [CategoryWeb::class, 'index']);
-        // Route::get('/category/data', [CategoryWeb::class, 'getData']);
-        // Route::get('/category/edit/{id}', [CategoryWeb::class, 'getData']);
+
+        // category
         Route::get('/category/add', [CategoryWeb::class, 'add']);
         Route::get('/category/{id}/edit', [CategoryWeb::class, 'edit']);
         Route::post('/category/{id}', [CategoryWeb::class, 'update']);
-        // Route::post('/category/store', [CategoryWeb::class, 'store']);
+        Route::resource('category', CategoryWeb::class);
+
+        // merchant
+        Route::prefix('merchant')->name('merchant.')->group(function () {
+            Route::get('{id}/detail', [MerchantWeb::class, 'detail'])->name('detail');
+            Route::get('/add', [MerchantWeb::class, 'add']);
+            Route::get('/{id}/edit', [MerchantWeb::class, 'edit']);
+            Route::post('/{id}', [MerchantWeb::class, 'update']);
+        });
+        Route::resource('merchant', MerchantWeb::class);
+
+
+        // product
+        Route::prefix('product')->name('product.')->group(function () {
+            Route::get('/add', [ProductWeb::class, 'add']);
+        });
+        Route::resource('product', ProductWeb::class);
+
     }
 );
-Route::resource('category', \App\Http\Controllers\Web\CategoryWeb::class)
-    ->middleware('auth');

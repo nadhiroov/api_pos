@@ -11,12 +11,18 @@ class Product extends Model
 {
     use HasFactory, SoftDeletes;
     protected $guarded = [];
+    protected $appends = ['image_url']; // Accessor untuk URL gambar
 
-    function categories() : BelongsTo {
+    public function getImageUrlAttribute()
+    {
+        return $this->image ? asset('storage/' . $this->image) : asset('assets/images/products/empty-shopping-bag.gif');
+    }
+
+    function category() : BelongsTo {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    function branches() : BelongsTo {
+    function branch() : BelongsTo {
         return $this->belongsTo(Branch::class, 'branch_id');
     }
 }

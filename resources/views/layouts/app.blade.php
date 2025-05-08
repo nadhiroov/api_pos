@@ -8,10 +8,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <!-- Favicon icon-->
-    <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
+    <link rel="shortcut icon" type="image/png" href="{{ asset('assets/images/logos/favicon.png') }}" />
 
     <!-- Core Css -->
-    <link rel="stylesheet" href="../assets/css/styles.css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/styles.css') }}" />
 
     <title>@yield('title')</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
@@ -21,7 +21,7 @@
 <body class="link-sidebar">
     <!-- Preloader -->
     <div class="preloader">
-        <img src="../assets/images/logos/favicon.png" alt="loader" class="lds-ripple img-fluid" />
+        <img src="{{ asset('assets/images/logos/favicon.png') }}" alt="loader" class="lds-ripple img-fluid" />
     </div>
     <div id="main-wrapper">
         <!-- Sidebar Start -->
@@ -933,7 +933,7 @@
                 <ul class="mb-0">
                     <li class="pb-7">
                         <div class="d-flex align-items-center">
-                            <img src="../assets/images/products/product-1.jpg" width="95" height="75"
+                            <img src="{{ asset('assets/images/products/product-1.jpg') }}" width="95" height="75"
                                 class="rounded-1 me-9 flex-shrink-0" alt="modernize-img" />
                             <div>
                                 <h6 class="mb-1">Supreme toys cooker</h6>
@@ -960,7 +960,7 @@
                     </li>
                     <li class="pb-7">
                         <div class="d-flex align-items-center">
-                            <img src="../assets/images/products/product-2.jpg" width="95" height="75"
+                            <img src="{{ asset('assets/images/products/product-1.jpg') }}" width="95" height="75"
                                 class="rounded-1 me-9 flex-shrink-0" alt="modernize-img" />
                             <div>
                                 <h6 class="mb-1">Supreme toys cooker</h6>
@@ -987,7 +987,7 @@
                     </li>
                     <li class="pb-7">
                         <div class="d-flex align-items-center">
-                            <img src="../assets/images/products/product-3.jpg" width="95" height="75"
+                            <img src="{{ asset('assets/images/products/product-1.jpg') }}" width="95" height="75"
                                 class="rounded-1 me-9 flex-shrink-0" alt="modernize-img" />
                             <div>
                                 <h6 class="mb-1">Supreme toys cooker</h6>
@@ -1032,18 +1032,18 @@
         </div>
     </div>
     <div class="dark-transparent sidebartoggler"></div>
-    <script src="../assets/js/vendor.min.js"></script>
+    <script src="{{ asset('assets/js/vendor.min.js') }}"></script>
     <!-- Import Js Files -->
-    <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/libs/simplebar/dist/simplebar.min.js"></script>
-    <script src="../assets/js/theme/app.init.js"></script>
-    <script src="../assets/js/theme/theme.js"></script>
-    <script src="../assets/js/theme/app.min.js"></script>
-    <script src="../assets/js/theme/sidebarmenu.js"></script>
+    {{-- <script src="../assets/libs/simplebar/dist/simplebar.min.js"></script> --}}
+    <script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('assets/js/theme/app.init.js') }}"></script>
+    <script src="{{ asset('assets/js/theme/theme.js') }}"></script>
+    <script src="{{ asset('assets/js/theme/app.min.js') }}"></script>
+    <script src="{{ asset('assets/js/theme/sidebarmenu.js') }}"></script>
 
     <!-- solar icons -->
     <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
-    <script src="../assets/js/plugins/animation-init.js"></script>
+    <script src="{{ asset('assets/js/plugins/animation-init.js') }}"></script>
     @yield('script')
 </body>
 

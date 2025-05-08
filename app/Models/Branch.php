@@ -13,7 +13,7 @@ class Branch extends Model
     use HasFactory, SoftDeletes;
     protected $fillable = ['shop_id', 'name', 'address', 'phone', 'user_id'];
 
-    function shops(): BelongsTo
+    function shop(): BelongsTo
     {
         return $this->belongsTo(Shop::class);
     }

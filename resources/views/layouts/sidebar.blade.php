@@ -59,7 +59,7 @@
               </a>
               <ul aria-expanded="false" class="collapse first-level">
                 <li class="sidebar-item">
-                  <a href="../main/blog-posts.html" class="sidebar-link">
+                  <a href="/merchant" class="sidebar-link">
                     <div class="round-16 d-flex align-items-center justify-content-center">
                       <i class="ti ti-circle"></i>
                     </div>
@@ -75,6 +75,15 @@
                   </a>
                 </li>
               </ul>
+            </li>
+
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/product" id="get-url" aria-expanded="false">
+                <span>
+                  <i class="ti ti-aperture"></i>
+                </span>
+                <span class="hide-menu">Product</span>
+              </a>
             </li>
           </ul>
         </nav>
