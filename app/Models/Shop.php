@@ -13,6 +13,9 @@ class Shop extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = ['user_id', 'name', 'address', 'phone', 'logo'];
+    protected $casts = [
+        'staff_id' => 'array',
+    ];
 
     public function owner(): BelongsTo
     {

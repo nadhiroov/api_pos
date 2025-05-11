@@ -6,6 +6,9 @@
 @endsection
 
 @section('content')
+    <head>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+    </head>
     <div class="container-fluid">
         <div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4">
             <div class="card-body px-4 py-3">
@@ -77,7 +80,8 @@
                             <div>
                                 {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_new">Add
                                     new</button> --}}
-                                <a href="/product/add" class="btn btn-primary">Add new</a>
+                                {{-- <a href="/product/add" class="btn btn-primary">Add new</a> --}}
+                                <a href="{{ route('product.add', $data->id) }}" class="btn btn-primary">Add new</a>
                             </div>
                         </div>
                         <div class="table-responsive">
@@ -88,7 +92,6 @@
                                         <th>Name</th>
                                         <th>Stock</th>
                                         <th>Price</th>
-                                        <th>Branch</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -189,10 +192,6 @@
                     {
                         data: 'price_formatted',
                         name: 'price_formatted'
-                    },
-                    {
-                        data: 'branch_name',
-                        name: 'branch_name'
                     },
                     {
                         data: 'action',

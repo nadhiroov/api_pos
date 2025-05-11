@@ -7,6 +7,7 @@ use App\Http\Controllers\Web\Dashboard;
 use App\Http\Controllers\Web\CategoryWeb;
 use App\Http\Controllers\Web\MerchantWeb;
 use App\Http\Controllers\Web\ProductWeb;
+use App\Http\Controllers\Web\StaffWeb;
 
 Route::get('/login', [AuthWeb::class, 'loginPage']);
 Route::get('/register', function () {
@@ -38,12 +39,18 @@ Route::middleware(isLogin::class)->group(
         });
         Route::resource('merchant', MerchantWeb::class);
 
-
         // product
         Route::prefix('product')->name('product.')->group(function () {
+            Route::get('{id}/add', [ProductWeb::class, 'add'])->name('add');
             Route::get('/add', [ProductWeb::class, 'add']);
+            Route::post('/uploadImage', [ProductWeb::class, 'uploadImage'])
+                ->name('uploadImage');
+            Route::get('/image/{filename}', [ProductWeb::class, 'showImage'])
+                ->name('image');
         });
         Route::resource('product', ProductWeb::class);
-
+        
+        // staff
+        Route::resource('staff', StaffWeb::class);
     }
 );

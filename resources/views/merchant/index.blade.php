@@ -47,6 +47,7 @@
                                 <th>Name</th>
                                 <th>Address</th>
                                 <th>Phone</th>
+                                <th>Products</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -141,6 +142,10 @@
                     {
                         data: 'phone',
                         name: 'phone'
+                    },
+                    {
+                        data: 'product_count',
+                        name: 'product_count'
                     },
                     {
                         data: 'action',

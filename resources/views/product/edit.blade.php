@@ -41,8 +41,10 @@
         </div>
         <div class="row">
             <div class="col-lg-8 ">
-                <form action="/product" method="POST" class="form-process-add">
+                <form action="/product" method="POST" class="form-process-edit">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
+                    @method('PUT')
+                    <input type="hidden" name="id" value="{{ $data->id }}">
                     <div class="card">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-center mb-7">
@@ -58,7 +60,8 @@
                                 <label class="form-label">Product Name <span class="text-danger">*</span>
                                 </label>
                                 <input type="text" class="form-control" name="name"
-                                    placeholder="A product name is required and recommended to be unique.">
+                                    placeholder="A product name is required and recommended to be unique."
+                                    value="{{ $data->name }}">
                             </div>
                             <div>
                                 <label class="form-label">Description</label>
@@ -74,57 +77,27 @@
                                 <label class="form-label">Stock <span class="text-danger">*</span>
                                 </label>
                                 <input type="text" class="form-control" name="stock" required
-                                    placeholder="Input stock value">
+                                    placeholder="Input stock value" value="{{ $data->stock }}">
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">SKU <span class="text-danger">*</span>
                                 </label>
                                 <input type="text" class="form-control" name="sku" required
-                                    placeholder="A product SKU is required and must be unique.">
+                                    placeholder="A product SKU is required and must be unique."
+                                    value="{{ $data->sku }}">
                             </div>
                             <div class="mb-4">
                                 <label class="form-label">Barcode <span class="text-danger"></span>
                                 </label>
                                 <input type="text" class="form-control" name="barcode"
-                                    placeholder="A product barcode must be unique.">
+                                    placeholder="A product barcode must be unique." value="{{ $data->barcode }}">
                             </div>
                             <div class="mb-7">
                                 <label class="form-label">Base Price <span class="text-danger">*</span>
                                 </label>
-                                <input type="number" class="form-control" placeholder="Product Price" name="price">
+                                <input type="number" class="form-control" placeholder="Product Price" name="price"
+                                    value="{{ $data->price }}">
                             </div>
-                            {{-- <div class="mb-7">
-                                <label class="form-label">Discount Type</label>
-                                <nav>
-                                    <div class="nav nav-tabs justify-content-between align-items-center gap-9"
-                                        id="nav-tab" role="tablist">
-                                        <label for="radio1"
-                                            class="form-check-label form-check p-3  border gap-2 rounded-2 d-flex flex-fill justify-content-center cursor-pointer"
-                                            id="customControlValidation2" id="nav-home-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-home" aria-controls="nav-home">
-                                            <input type="radio" class="form-check-input" name="new-products"
-                                                id="radio1" checked>
-                                            <span class="fs-4 text-dark">No Discount</span>
-                                        </label>
-                                        <label for="radio2"
-                                            class="form-check-label p-3 form-check border gap-2 rounded-2 d-flex flex-fill justify-content-center cursor-pointer"
-                                            id="customControlValidation2" id="nav-profile-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-profile" aria-controls="nav-profile">
-                                            <input type="radio" class="form-check-input" name="new-products"
-                                                id="radio2" disabled readonly>
-                                            <span class="fs-4 text-dark">Percentage %</span>
-                                        </label>
-                                        <label for="radio3"
-                                            class="form-check-label form-check p-3 border gap-2 rounded-2 d-flex flex-fill justify-content-center cursor-pointer"
-                                            id="customControlValidation2" id="nav-contact-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-contact" aria-controls="nav-contact">
-                                            <input type="radio" class="form-check-input" name="new-products"
-                                                id="radio3" disabled readonly>
-                                            <span class="fs-4 text-dark">Fixed Price</span>
-                                        </label>
-                                    </div>
-                                </nav>
-                            </div> --}}
                         </div>
                     </div>
                     <div class="form-actions mb-5">
@@ -149,7 +122,7 @@
                                     <option></option>
                                     @foreach ($branches as $branch)
                                         <option value="{{ $branch->id }}"
-                                            @if ($dataBranch != null && $branch->id == $dataBranch->id) selected @endif>{{ $branch->name }}</option>
+                                            @if ($branch->id == $data->branch_id) selected @endif>{{ $branch->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -157,12 +130,13 @@
                                 <label class="form-label">Unit</label>
                                 <select class="select2-unit form-control" name="unit">
                                     <option></option>
-                                    <option value="pcs">pcs</option>
-                                    <option value="kg">kg</option>
-                                    <option value="gr">gr</option>
-                                    <option value="box">box</option>
-                                    <option value="portion">portion</option>
-                                    <option value="set">set</option>
+                                    <option @if ($data->unit == 'pcs') selected @endif value="pcs">pcs</option>
+                                    <option @if ($data->unit == 'kg') selected @endif value="kg">kg</option>
+                                    <option @if ($data->unit == 'gr') selected @endif value="gr">gr</option>
+                                    <option @if ($data->unit == 'box') selected @endif value="box">box</option>
+                                    <option @if ($data->unit == 'portion') selected @endif value="portion">portion
+                                    </option>
+                                    <option @if ($data->unit == 'set') selected @endif value="set">set</option>
                                 </select>
                             </div>
                             <div class="mt-7 mb-3">
@@ -170,7 +144,8 @@
                                 <select class="select2-category form-control" name="category_id">
                                     <option></option>
                                     @foreach ($categories as $category)
-                                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                        <option @if ($category->id == $data->category_id) selected @endif
+                                            value="{{ $category->id }}">{{ $category->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -218,6 +193,10 @@
                     theme: "snow",
                     placeholder: 'Set a description to the product for better visibility.',
                 })
+                quill.clipboard.dangerouslyPasteHTML(
+                    0,
+                    `{!! $data->description !!}`
+                )
 
                 $(".select2-branch").select2({
                     placeholder: "Select a merchant",
@@ -231,13 +210,14 @@
                     placeholder: "Select an unit",
                 })
 
-                $(".form-process-add").on('submit', function(e) {
+                $(".form-process-edit").on('submit', function(e) {
                     e.preventDefault()
                     let formData = new FormData(this)
                     formData.append('_token', $(this).find('input[name=_token]').val())
-                    formData.append('description', quill.getText());
+                    formData.append('description', quill.getText())
+                    formData.set('_method', 'PUT')
                     $.ajax({
-                        url: '/product',
+                        url: '{{ route('product.update', $data->id) }}',
                         type: "post",
                         data: formData,
                         headers: {
@@ -254,7 +234,7 @@
                             } else {
                                 toastr.error(response.message, response.status)
                             }
-                            let redirectUrl = "{{ route('merchant.detail', $dataBranch->id) }}";
+                            let redirectUrl = "{{ route('merchant.detail', $data->branch_id) }}";
                             if (redirectUrl) {
                                 setTimeout(function() {
                                     window.location.href = redirectUrl;
@@ -272,19 +252,55 @@
         <script>
             Dropzone.autoDiscover = false;
 
+            const imageInput = $('.imageInput');
+
             const myDropzone = new Dropzone("#my-dropzone", {
-                url: "/product/uploadImage",
+                url: "{{ route('product.uploadImage') }}", // endpoint upload
                 paramName: "file",
-                autoProcessQueue: true,
                 maxFiles: 1,
                 addRemoveLinks: true,
+                autoProcessQueue: true,
+                thumbnailWidth: 70,
+                thumbnailHeight: 70,
+                thumbnailMethod: 'contain',
                 init: function() {
-                    this.on("success", function(file, response) {
-                        document.getElementById("imageInput").value = response.filename;
+                    const dz = this;
+
+                    // ketika upload baru sukses
+                    dz.on("success", (file, response) => {
+                        imageInput.value = response.filename;
+                        // karena satu file, block supaya tidak bisa upload lagi
+                        dz.options.maxFiles = 0;
                     });
-                    this.on("removedfile", function(file) {
-                        document.getElementById("imageInput").value = "";
+
+                    // kalau file di-remove
+                    dz.on("removedfile", file => {
+                        imageInput.value = "";
+                        dz.options.maxFiles = 1;
                     });
+
+                    // ** preload existing image jika ada **
+                    @if (!empty($data->image))
+                        const existingFilename = "{{ $data->image }}"
+                        const existingUrl = "{{ route('product.image', ['filename' => $data->image]) }}"
+                        // buat mockFile sesuai spec Dropzone
+                        const mockFile = {
+                            name: existingFilename,
+                            size: 0,
+                            accepted: true
+                        }
+
+                        // turunkan limit supaya tidak bisa nambah lagi
+                        dz.options.maxFiles = 0;
+
+                        // emit event agar Dropzone mem‐render sendiri
+                        dz.emit("addedfile", mockFile);
+                        dz.emit("thumbnail", mockFile, existingUrl);
+                        dz.emit("complete", mockFile);
+
+                        // set value hidden input
+                        imageInput.value = existingFilename;
+                    @endif
                 }
             });
         </script>

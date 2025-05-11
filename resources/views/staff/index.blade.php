@@ -37,7 +37,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between mb-4 pb-8">
-                    <h4 class="card-title">{{ $title }}</h4>
+                    <h4 class="card-title">Categories</h4>
                     <div class="d-flex">
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_new">Add new</button>
                     </div>
@@ -47,11 +47,8 @@
                     <table id="datatable" class="table table-striped table-bordered text-nowrap align-middle">
                         <thead>
                             <tr>
-                                <th>Image</th>
                                 <th>Name</th>
-                                <th>Stock</th>
-                                <th>Price</th>
-                                <th>Branch</th>
+                                <th>Branches</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -65,16 +62,16 @@
     {{-- modal add new --}}
     <div class="modal fade" id="add_new" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
         style="display: none;">
-        <div class="modal-dialog modal-md">
+        <div class="modal-dialog modal-sm">
             <div class="modal-content">
-                <form action="/merchant" method="POST" class="form-process-add">
+                <form action="/category" method="POST" class="form-process-add">
                     <div class="modal-header d-flex align-items-center">
                         <h4 class="modal-title" id="myModalLabel">
-                            Add new data {{ strtolower($title) }}
+                            Add new data
                         </h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body modal-body-add">
+                    <div class="modal-body category-body-add">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn bg-danger-subtle text-danger  waves-effect"
@@ -93,7 +90,7 @@
     {{-- modal edit --}}
     <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
         style="display: none;">
-        <div class="modal-dialog modal-md">
+        <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <form action="/category" method="PATCH" class="form-process-edit">
                     <div class="modal-header d-flex align-items-center">
@@ -102,7 +99,7 @@
                         </h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body modal-body-edit">
+                    <div class="modal-body category-body-edit">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn bg-danger-subtle text-danger  waves-effect"
@@ -131,28 +128,17 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    url: '/product/data',
+                    url: '/staff/data',
                     type: 'GET'
                 },
-                columns: [{
-                        data: 'image',
-                        name: 'image'
-                    },
+                columns: [
                     {
                         data: 'name',
                         name: 'name'
                     },
                     {
-                        data: 'stock',
-                        name: 'stock'
-                    },
-                    {
-                        data: 'price_formatted',
-                        name: 'price_formatted'
-                    },
-                    {
-                        data: 'branch_name',
-                        name: 'branch_name'
+                        data: 'branches',
+                        name: 'branches'
                     },
                     {
                         data: 'action',
@@ -165,15 +151,15 @@
                     width: '20%',
                     targets: 1
                 }]
-            });
-        });
+            })
+        })
 
         $('#add_new').on('show.bs.modal', function(e) {
             $.ajax({
                 type: 'get',
-                url: '/merchant/add',
+                url: '/category/add',
                 success: function(data) {
-                    $('.modal-body-add').html(data);
+                    $('.category-body-add').html(data);
                 }
             })
         })
@@ -182,9 +168,9 @@
             let id = $(e.relatedTarget).data('id')
             $.ajax({
                 type: 'get',
-                url: `/merchant/${id}/edit`,
+                url: `/category/${id}/edit`,
                 success: function(data) {
-                    $('.modal-body-edit').html(data);
+                    $('.category-body-edit').html(data);
                 }
             })
         })
@@ -193,7 +179,7 @@
             e.preventDefault()
             let formData = new FormData(this);
             $.ajax({
-                url: '/merchant',
+                url: '/category',
                 type: "post",
                 data: formData,
                 processData: false,
@@ -219,7 +205,7 @@
             e.preventDefault()
             let formData = new FormData(this);
             $.ajax({
-                url: `/merchant/${formData.get('id')}`,
+                url: `/category/${formData.get('id')}`,
                 type: "POST",
                 data: formData,
                 headers: {
@@ -243,62 +229,5 @@
                 },
             })
         })
-
-        function confirmDeletes(selection) {
-            let id = $(selection).attr("data-id");
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!",
-            }).then((result) => {
-                if (result.value) {
-                    $.ajax({
-                        url: `/merchant/${id}`,
-                        type: "DELETE",
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                        },
-                        dataType: "json",
-                        async: false,
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(response = "") {
-                            if (response.status == 'Success') {
-                                toastr.success(response.message, response.status);
-                                $('#datatable').DataTable().ajax.reload(null, false);
-                            } else {
-                                if (response.code == 23000) {
-                                    Swal.fire({
-                                        type: "error",
-                                        title: response.status,
-                                        text: "The data is constrained with product",
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        type: "error",
-                                        title: response.status,
-                                        text: response.message,
-                                    });
-
-                                }
-                            }
-                            $('#zero_config').DataTable().ajax.reload(null, false);
-                        },
-                        error: function(response) {
-                            Swal.fire({
-                                type: "error",
-                                title: response.status,
-                                text: response.message,
-                            })
-                        },
-                    })
-                }
-            })
-        }
     </script>
 @endsection

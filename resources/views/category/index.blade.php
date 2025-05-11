@@ -8,6 +8,9 @@
 @endsection
 
 @section('content')
+    <head>
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+    </head>
     <div class="container-fluid">
         <div class="card bg-info-subtle shadow-none position-relative overflow-hidden mb-4">
             <div class="card-body px-4 py-3">
@@ -127,8 +130,7 @@
                     url: '/category/data',
                     type: 'GET'
                 },
-                columns: [
-                    {
+                columns: [{
                         data: 'name',
                         name: 'name'
                     },
@@ -221,62 +223,5 @@
                 },
             })
         })
-
-        function confirmDelete(selection) {
-            let id = $(selection).attr("data-id");
-            Swal.fire({
-                title: "Are you sure?",
-                text: "You won't be able to revert this!",
-                type: "warning",
-                showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!",
-            }).then((result) => {
-                if (result.value) {
-                    $.ajax({
-                        url: `/category/${id}`,
-                        type: "DELETE",
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                        },
-                        dataType: "json",
-                        async: false,
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        },
-                        success: function(response = "") {
-                            if (response.status == 'Success') {
-                                toastr.success(response.message, response.status);
-                                $('#datatable').DataTable().ajax.reload(null, false);
-                            } else {
-                                if (response.code == 23000) {
-                                    Swal.fire({
-                                        type: "error",
-                                        title: response.status,
-                                        text: "The data is constrained with product",
-                                    });
-                                } else {
-                                    Swal.fire({
-                                        type: "error",
-                                        title: response.status,
-                                        text: response.message,
-                                    });
-
-                                }
-                            }
-                            $('#zero_config').DataTable().ajax.reload(null, false);
-                        },
-                        error: function(response) {
-                            Swal.fire({
-                                type: "error",
-                                title: response.status,
-                                text: response.message,
-                            });
-                        },
-                    })
-                }
-            });
-        }
     </script>
 @endsection

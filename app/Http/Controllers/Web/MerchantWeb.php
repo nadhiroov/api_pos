@@ -55,8 +55,10 @@ class MerchantWeb extends Controller
             ->whereHas('shop', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
             })
-            ->with('shop');
+            ->with('shop')
+            ->withCount('products');
         return DataTables::of($branches)
+            ->addColumn('product_count', fn($branch) => $branch->products_count)
             ->addColumn('action', function ($branch) {
                 $btn = '<div class="d-flex align-items-center gap-2">';
                 $btn .= '<a href="' . route('merchant.detail', $branch->id) . '" class="btn bg-info-subtle text-info"><i class="ti ti-zoom-exclamation fs-4 me-2"></i></a>';
@@ -65,7 +67,6 @@ class MerchantWeb extends Controller
                 $btn .= '</div>';
                 return $btn;
             })
-            // <a href="' . route('product.show', $product->id) . '" class="btn bg-info-subtle text-info"><i class="ti ti-zoom-exclamation fs-4 me-2"></i></a>
             ->filter(function ($query) use ($request) {
                 // Handle search
                 if ($request->has('search') && !empty($request->search['value'])) {

@@ -12,6 +12,9 @@ class Branch extends Model
 {
     use HasFactory, SoftDeletes;
     protected $fillable = ['shop_id', 'name', 'address', 'phone', 'user_id'];
+    protected $casts = [
+        'user_id' => 'array',
+    ];
 
     function shop(): BelongsTo
     {

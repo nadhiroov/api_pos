@@ -28,7 +28,7 @@
             <li class="sidebar-item">
               <a class="sidebar-link" href="/dashboard" id="get-url" aria-expanded="false">
                 <span>
-                  <i class="ti ti-aperture"></i>
+                  <i class="ti ti-home"></i>
                 </span>
                 <span class="hide-menu">Dashboard</span>
               </a>
@@ -36,7 +36,7 @@
             <li class="sidebar-item">
               <a class="sidebar-link" href="/shop" id="get-url" aria-expanded="false">
                 <span>
-                  <i class="ti ti-aperture"></i>
+                  <i class="ti ti-settings"></i>
                 </span>
                 <span class="hide-menu">Shop Setting</span>
               </a>
@@ -44,45 +44,33 @@
             <li class="sidebar-item">
               <a class="sidebar-link" href="/category" id="get-url" aria-expanded="false">
                 <span>
-                  <i class="ti ti-aperture"></i>
+                  <i class="ti ti-category"></i>
                 </span>
                 <span class="hide-menu">Category</span>
               </a>
             </li>
-            
             <li class="sidebar-item">
-              <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
-                <span class="d-flex">
-                  <i class="ti ti-chart-donut-3"></i>
+              <a class="sidebar-link" href="/merchant" id="get-url" aria-expanded="false">
+                <span>
+                  <i class="ti ti-building-store"></i>
                 </span>
                 <span class="hide-menu">Merchant</span>
               </a>
-              <ul aria-expanded="false" class="collapse first-level">
-                <li class="sidebar-item">
-                  <a href="/merchant" class="sidebar-link">
-                    <div class="round-16 d-flex align-items-center justify-content-center">
-                      <i class="ti ti-circle"></i>
-                    </div>
-                    <span class="hide-menu">My merchants</span>
-                  </a>
-                </li>
-                <li class="sidebar-item">
-                  <a href="../main/blog-detail.html" class="sidebar-link">
-                    <div class="round-16 d-flex align-items-center justify-content-center">
-                      <i class="ti ti-circle"></i>
-                    </div>
-                    <span class="hide-menu">Products</span>
-                  </a>
-                </li>
-              </ul>
             </li>
-
             <li class="sidebar-item">
               <a class="sidebar-link" href="/product" id="get-url" aria-expanded="false">
                 <span>
-                  <i class="ti ti-aperture"></i>
+                  <i class="ti ti-shopping-cart"></i>
                 </span>
                 <span class="hide-menu">Product</span>
+              </a>
+            </li>
+            <li class="sidebar-item">
+              <a class="sidebar-link" href="/staff" id="get-url" aria-expanded="false">
+                <span>
+                  <i class="ti ti-users"></i>
+                </span>
+                <span class="hide-menu">Staff</span>
               </a>
             </li>
           </ul>
