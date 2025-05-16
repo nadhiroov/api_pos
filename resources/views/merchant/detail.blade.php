@@ -3,9 +3,11 @@
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
 @endsection
 
 @section('content')
+
     <head>
         <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
@@ -36,19 +38,19 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row mb-4">
             <div class="col-md-6 col-lg-4 d-flex align-items-stretch">
                 <div class="card w-100">
-                    <div class="card-body">
+                    <div class="card-body mb-4">
                         <div class="mb-4">
                             <h4 class="card-title fw-semibold">{{ $title }}</h4>
                         </div>
                         <ul class="timeline-widget mb-0 position-relative mb-n5">
                             <div class="mb-3 row">
-                                <label for="example-text-input" class="col-md-4 col-form-label">Merchant name</label>
+                                <label for="merchantName" class="col-md-4 col-form-label">Merchant name</label>
                                 <div class="col-md-8">
-                                    <input class="form-control" type="text" value="{{ $branch->name }}"
-                                        id="example-text-input" disabled>
+                                    <input class="form-control" type="text" value="{{ $branch->name }}" id="merchantName"
+                                        disabled>
                                 </div>
                             </div>
                             <div class="mb-3 row">
@@ -58,10 +60,10 @@
                                 </div>
                             </div>
                             <div class="mb-3 row">
-                                <label for="example-text-input" class="col-md-4 col-form-label">Phone</label>
+                                <label for="merchantPhone" class="col-md-4 col-form-label">Phone</label>
                                 <div class="col-md-8">
                                     <input class="form-control" type="text" value="{{ $branch->phone }}"
-                                        id="example-text-input" disabled>
+                                        id="merchantPhone" disabled>
                                 </div>
                             </div>
                         </ul>
@@ -69,7 +71,37 @@
                 </div>
             </div>
 
-            <div class="col-md-12 col-lg-8 d-flex align-items-stretch">
+            <div class="col-md-8 col-lg-8 d-flex align-items-stretch">
+                <div class="card w-100">
+                    <div class="card-body">
+                        <div class="d-sm-flex d-block align-items-center justify-content-between mb-3">
+                            <div class="mb-3 mb-sm-0">
+                                <h4 class="card-title fw-semibold">Staff</h4>
+                            </div>
+                            <div>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-new-staff">Manage</button>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="datatableStaff" class="table table-striped table-bordered text-nowrap align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Role</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-lg-12 d-flex align-items-stretch">
                 <div class="card w-100">
                     <div class="card-body">
                         <div class="d-sm-flex d-block align-items-center justify-content-between mb-3">
@@ -105,47 +137,19 @@
         </div>
     </div>
 
-    {{-- modal add new --}}
-    <div class="modal fade" id="add_new" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
+    {{-- modal add new staff --}}
+    <div class="modal fade" id="add-new-staff" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
         style="display: none;">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <form action="/merchant" method="POST" class="form-process-add">
+                <form action="/merchant" method="POST" class="form-process-add-staff">
                     <div class="modal-header d-flex align-items-center">
                         <h4 class="modal-title" id="myModalLabel">
-                            Add new data {{ strtolower($title) }}
+                            Add staff to merchant
                         </h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body modal-body-add">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn bg-danger-subtle text-danger  waves-effect"
-                            data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" class="btn bg-secondary-subtle text-secondary  waves-effect"
-                            data-bs-dismiss="modal">
-                            Save
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    {{-- modal edit --}}
-    <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
-        style="display: none;">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <form action="/category" method="PATCH" class="form-process-edit">
-                    <div class="modal-header d-flex align-items-center">
-                        <h4 class="modal-title" id="myModalLabel">
-                            Edit data
-                        </h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body modal-body-edit">
+                    <div class="modal-body modal-body-add-staff">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn bg-danger-subtle text-danger  waves-effect"
@@ -168,6 +172,7 @@
     <script src="{{ asset('assets/js/plugins/toastr-init.js') }}"></script>
     <script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('#datatable').DataTable({
@@ -204,15 +209,52 @@
                     width: '20%',
                     targets: 1
                 }]
+            })
+
+            $('#datatableStaff').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: '/merchant/{{ $branch->id }}/staffs',
+                    type: 'GET'
+                },
+                columns: [{
+                        data: 'name',
+                        name: 'name'
+                    },
+                    {
+                        data: 'role_name',
+                        name: 'role_name'
+                    }
+                ],
+                columnDefs: [{
+                    width: '20%',
+                    targets: 1
+                }]
             });
         });
 
-        $('#add_new').on('show.bs.modal', function(e) {
+        $('#add-new-staff').on('show.bs.modal', function(e) {
             $.ajax({
                 type: 'get',
-                url: '/product/add',
+                url: '/staff/{{ $branch->id }}/add',
                 success: function(data) {
-                    $('.modal-body-add').html(data);
+                    $('.modal-body-add-staff').html(data)
+                    $('.select2').select2({
+                        placeholder: "Select Branches",
+                        dropdownParent: $('#add-new-staff')
+                    })
+                }
+            })
+        })
+
+        $('#edit-staff').on('show.bs.modal', function(e) {
+            let id = $(e.relatedTarget).data('id')
+            $.ajax({
+                type: 'get',
+                url: `/merchant/${id}/edit`,
+                success: function(data) {
+                    $('.modal-body-edit-staff').html(data);
                 }
             })
         })
@@ -228,11 +270,11 @@
             })
         })
 
-        $(".form-process-add").on('submit', function(e) {
+        $(".form-process-add-staff").on('submit', function(e) {
             e.preventDefault()
             let formData = new FormData(this);
             $.ajax({
-                url: '/merchant',
+                url: '/staff/{{ $branch->id }}/add',
                 type: "post",
                 data: formData,
                 processData: false,
@@ -246,36 +288,7 @@
                     } else {
                         toastr.error(response.message, response.status);
                     }
-                    $('#datatable').DataTable().ajax.reload(null, false);
-                },
-                error: function(response) {
-                    toastr.error(response.message, response.status);
-                },
-            })
-        })
-
-        $(".form-process-edit").on('submit', function(e) {
-            e.preventDefault()
-            let formData = new FormData(this);
-            $.ajax({
-                url: `/merchant/${formData.get('id')}`,
-                type: "POST",
-                data: formData,
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                },
-                processData: false,
-                contentType: false,
-                dataType: "json",
-                cache: false,
-                async: false,
-                success: function(response = "") {
-                    if (response.status == 'Success') {
-                        toastr.success(response.message, response.status);
-                    } else {
-                        toastr.error(response.message, response.status);
-                    }
-                    $('#datatable').DataTable().ajax.reload(null, false);
+                    $('#datatableStaff').DataTable().ajax.reload(null, false);
                 },
                 error: function(response) {
                     toastr.error(response.message, response.status);

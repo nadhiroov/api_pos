@@ -32,6 +32,11 @@
                                 {{ $message }}
                             </div>
                         @enderror
+                        @if (session('success'))
+                            <div class="alert alert-success text-success" role="alert">
+                                {{ session('success') }}
+                            </div>
+                        @endif
                         <div class="card mb-0">
                             <div class="card-body">
                                 <a href="../main/index.html"

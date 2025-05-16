@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}" />
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
-    {{-- <link rel="stylesheet" href="{{ asset('assets/libs/quill/dist/quill.snow.css') }}"> --}}
 @endsection
 
 @section('content')
@@ -131,7 +130,7 @@
                         <button type="submit" class="btn btn-primary">
                             Save changes
                         </button>
-                        <button type="button" class="btn bg-danger-subtle text-danger ms-6">
+                        <button type="button" class="btn bg-danger-subtle text-danger ms-6 btn-cancel">
                             Cancel
                         </button>
                     </div>
@@ -209,7 +208,6 @@
         <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
         <script src="{{ asset('assets/js/forms/select2.init.js') }}"></script>
         <script src="{{ asset('assets/js/plugins/toastr-init.js') }}"></script>
-        {{-- <script src="{{ asset('assets/libs/quill/dist/quill.min.js') }}"></script> --}}
         <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
         <script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
         <script>
@@ -254,7 +252,12 @@
                             } else {
                                 toastr.error(response.message, response.status)
                             }
-                            let redirectUrl = "{{ route('merchant.detail', $dataBranch->id) }}";
+                            @if (isset($dataBranch))
+                                let redirectUrl =
+                                    "{{ route('merchant.detail', $dataBranch->id) }}";
+                            @else
+                                let redirectUrl = "/product";
+                            @endif
                             if (redirectUrl) {
                                 setTimeout(function() {
                                     window.location.href = redirectUrl;
@@ -266,6 +269,16 @@
                         },
                     })
                 })
+            })
+
+            $(".btn-cancel").on('click', function() {
+                @if (isset($dataBranch))
+                    let redirectUrl =
+                        "{{ route('merchant.detail', $dataBranch->id) }}";
+                @else
+                    let redirectUrl = "/product";
+                @endif
+                window.location.href = redirectUrl;
             })
         </script>
 

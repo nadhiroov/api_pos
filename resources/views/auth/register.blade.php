@@ -27,6 +27,11 @@
             <div class="d-flex align-items-center justify-content-center w-100">
                 <div class="row justify-content-center w-100">
                     <div class="col-md-8 col-lg-6 col-xxl-3 auth-card">
+                        @error('invalid')
+                            <div class="alert alert-danger text-danger" role="alert">
+                                {{ $message }}
+                            </div>
+                        @enderror
                         <div class="card mb-0">
                             <div class="card-body">
                                 <a href="../main/index.html"
@@ -36,27 +41,57 @@
                                     <img src="{{ asset('assets/images/logos/light-logo.svg') }}" class="light-logo"
                                         alt="Logo-light" />
                                 </a>
-                                <form>
+                                <form action="/register" method="post">
+                                    @csrf
                                     <div class="mb-3">
-                                        <label for="exampleInputEmail1" class="form-label">Name</label>
-                                        <input type="text" class="form-control" id="exampleInputtext"
-                                            aria-describedby="textHelp">
+                                        <label for="name" class="form-label">Name</label>
+                                        <input type="text" class="form-control @error('name') is-invalid @enderror"
+                                            id="name" aria-describedby="textHelp" autofocus
+                                            placeholder="enter your fullname here" value="{{ old('name') }}" name="name">
+                                        @error('name')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-3">
-                                        <label for="exampleInputEmail1" class="form-label">Email address</label>
-                                        <input type="email" class="form-control" id="exampleInputEmail1"
-                                            aria-describedby="emailHelp">
+                                        <label for="username" class="form-label">Username</label>
+                                        <input type="text"
+                                            class="form-control @error('username') is-invalid @enderror" id="username"
+                                            aria-describedby="textHelp" autofocus
+                                            placeholder="enter the unique username" value="{{ old('username') }}" name="username">
+                                        @error('username')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Email address</label>
+                                        <input type="email" class="form-control @error('email') is-invalid @enderror"
+                                            id="email" aria-describedby="emailHelp"
+                                            placeholder="enter your email address" name="email"
+                                            value="{{ old('email') }}">
+                                        @error('email')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                     <div class="mb-4">
                                         <label for="exampleInputPassword1" class="form-label">Password</label>
-                                        <input type="password" class="form-control" id="exampleInputPassword1">
+                                        <input type="password"
+                                            class="form-control @error('password') is-invalid @enderror"
+                                            id="exampleInputPassword1" placeholder="enter your password"
+                                            name="password">
+                                        @error('password')
+                                            <div class="invalid-feedback">{{ $message }}</div>
+                                        @enderror
                                     </div>
-                                    <a href="../main/authentication-login.html"
-                                        class="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign Up</a>
+                                    <div class="mb-3">
+                                        <label for="code" class="form-label">Shop Code (optional)</label>
+                                        <input type="text" class="form-control" id="code" name="code"
+                                            aria-describedby="emailHelp" placeholder="enter the shop code">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100 py-8 mb-4 rounded-2">Sign
+                                        Up</button>
                                     <div class="d-flex align-items-center">
                                         <p class="fs-4 mb-0 text-dark">Already have an Account?</p>
-                                        <a class="text-primary fw-medium ms-2"
-                                            href="/login">Sign In</a>
+                                        <a class="text-primary fw-medium ms-2" href="/login">Sign In</a>
                                     </div>
                                 </form>
                             </div>

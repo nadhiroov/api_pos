@@ -8,6 +8,7 @@
 @endsection
 
 @section('content')
+
     <head>
         <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
@@ -39,7 +40,8 @@
                 <div class="d-flex align-items-center justify-content-between mb-4 pb-8">
                     <h4 class="card-title">{{ $title }}</h4>
                     <div class="d-flex">
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_new">Add new</button>
+                        {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_new">Add new</button> --}}
+                        <a href="{{ route('product.addNew') }}"class="btn btn-primary">Add new</a>
                     </div>
                 </div>
                 <br>

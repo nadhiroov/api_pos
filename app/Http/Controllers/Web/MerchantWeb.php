@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Web;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\Branch;
 use App\Models\Shop;
+use App\Models\Branch;
+use Illuminate\Http\Request;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use League\CommonMark\Delimiter\Bracket;
 use Yajra\DataTables\Facades\DataTables;
+use Yajra\DataTables\DataTables as DataTablesDataTables;
 
 class MerchantWeb extends Controller
 {
@@ -18,7 +22,7 @@ class MerchantWeb extends Controller
         $this->title = 'Merchant';
     }
 
-    public function index()
+    public function index() : View
     {
         return view('merchant.index', [
             'title' => $this->title,
@@ -30,14 +34,14 @@ class MerchantWeb extends Controller
         return view('merchant.add');
     }
 
-    function edit(int $id)
+    function edit(int $id) : View
     {
         Auth::user();
         $branch = Branch::where('id', $id)->first();
         return view('merchant.edit', ['data' => $branch]);
     }
 
-    function detail($id)
+    function detail($id) : View
     {
         Auth::user();
         $branch = Branch::where('id', $id)->first();
@@ -114,7 +118,45 @@ class MerchantWeb extends Controller
             ->toJson();
     }
 
-    public function store(Request $request)
+    function showStaff(Request $request, $branchId) {
+        $branch = Branch::findOrFail($branchId);
+        $staffIds = $branch->user_id ?? [];
+
+        // 1) Query User + join ke user_role dan roles
+        $query = User::whereIn('users.id', $staffIds)
+            ->leftJoin('user_role', 'users.id', '=', 'user_role.user_id')
+            ->leftJoin('roles',     'user_role.role_id', '=', 'roles.id')
+            ->select([
+                'users.id',
+                'users.name',
+                'users.email',
+                'roles.role_name as role_name'
+            ]);
+
+        // 2) Kirim ke DataTables
+        return DataTables::of($query)
+            ->addIndexColumn()
+            ->addColumn('name',  fn($u) => $u->name)
+            ->addColumn('role_name', fn($u) => $u->role_name ?? '-')
+            ->addColumn('branches', function ($u) use ($branch) {
+                // badge per branch
+                $badges = collect($branch->branches)
+                    ->filter(fn($b) => in_array($u->id, $b->user_id ?? []))
+                    ->map(fn($b) => '<span class="badge bg-secondary me-1">' . e($b->name) . '</span>')
+                    ->implode('');
+                return $badges ?: '<span class="text-muted">—</span>';
+            })
+            ->addColumn('action', function ($user) {
+                $btn = '<div class="d-flex align-items-center gap-2">';
+                $btn .= '<a onclick="confirmDelete(this)" class="btn bg-danger-subtle text-danger" data-id="' . $user->id . '"><i class="ti ti-trash fs-4 me-2"></i></a>';
+                $btn .= '</div>';
+                return $btn;
+            })
+            ->rawColumns(['branches', 'action'])
+            ->make(true);
+    }
+
+    public function store(Request $request) : JsonResponse
     {
         $user = Auth::user();
         $data = $request->validate([
@@ -137,7 +179,7 @@ class MerchantWeb extends Controller
         ]);
     }
 
-    public function update(int $id, Request $request)
+    public function update(int $id, Request $request) : JsonResponse
     {
         Auth::user();
         $data = $request->validate([
@@ -151,15 +193,21 @@ class MerchantWeb extends Controller
             'address'  => $data['address'] ?? null,
             'phone'    => $data['phone'] ?? null,
         ];
-        $branch = new Branch($saveData);
-        $branch->where('id', $id)->update($saveData);
-        return response()->json([
-            'status'  => 'Success',
-            'message' => 'Data saved'
-        ]);
+        $updated = Branch::where('id', $id)->update($saveData);
+        if ($updated) {
+            return response()->json([
+                'status'  => 'Success',
+                'message' => 'Data saved'
+            ], 200);
+        } else {
+            return response()->json([
+                'status'  => 'Error',
+                'message' => 'Failed to update. Branch not found or no changes detected.'
+            ], 400);
+        }
     }
 
-    public function destroy(int $id)
+    public function destroy(int $id) : JsonResponse
     {
         Auth::user();
         $branch = Branch::where('id', $id)->first();

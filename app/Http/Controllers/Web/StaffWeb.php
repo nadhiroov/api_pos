@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Web;
 use App\Models\Shop;
 use App\Models\User;
 use App\Http\Controllers\Controller;
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
@@ -26,28 +27,40 @@ class StaffWeb extends Controller
         ]);
     }
 
-    public function add()
+    public function add($branch_id = '')
     {
-        return view('staff.add');
-    }
-
-    public function edit($id)
-    {
-        return view('staff.edit', [
-            'title' => $this->title,
-            // 'data'  => Staff::where('id', $id)->first()
+        $user = Auth::user();
+        $shop = Shop::with('branches')->where('user_id', $user->id)->first();
+        $branch = Branch::where('id', $branch_id)->first();
+        $staffs = User::whereIn('id', $shop->staff_id)->get();
+        // dd($branch->user_id);
+        return view('staff.add', [
+            'title' => "Add Staff",
+            'data' => $staffs,
+            'branch' => $branch,
+            'branches' => $shop->branches,
         ]);
     }
 
-    public function show() {
+    public function edit($id = '')
+    {
         $user = Auth::user();
-        // 1. Ambil shop beserta semua branch-nya
+        // $shop = Shop::with('branches')->where('user_id', $user->id)->first();
+        // echo $shop;die;
+        $shop = Shop::where('user_id', $user->id)->first();
+        $branches = Branch::where('shop_id', $shop->id)->get();
+        return view('staff.edit', [
+            'title'   => $this->title,
+            'data'    => $branches,
+            'user_id' => $id,
+        ]);
+    }
+
+    public function show()
+    {
+        $user = Auth::user();
         $shop = Shop::with('branches')->where('user_id', $user->id)->first();
-
-        // ambil array staff_id dari JSON → bisa kosong
         $staffIds = $shop->staff_id ?? [];
-
-        // query user yang ID-nya ada di staff_id
         $staffs = User::whereIn('id', $staffIds)->get();
         return DataTables::of($staffs)
             ->addIndexColumn()
@@ -61,13 +74,40 @@ class StaffWeb extends Controller
 
                 return $badges ?: '<span class="text-muted">—</span>';
             })
-            ->addColumn('action', function ($staff) {
-                return '<div class="d-flex align-items-center gap-2">
-                <a href="' . route('product.edit', $staff->id) . '" class="btn bg-warning-subtle text-warning"><i class="ti ti-edit fs-4 me-2"></i></a>
-                <a onclick="confirmDelete(this)" class="btn bg-danger-subtle text-danger" target="product" data-id="' . $staff->id . '"><i class="ti ti-trash fs-4 me-2"></i></a>
-                    </div>';
-            })
-            ->rawColumns(['branches', 'action'])
+            ->rawColumns(['branches'])
             ->make(true);
+    }
+
+    public function editBranch(Request $request)
+    {
+        $user = Auth::user();
+        dd($request['branches_id']);
+        $shop = Shop::with('branches')->where('user_id', $user->id)->first();
+        foreach ($shop->branches as $branch) {
+            # code...
+        }
+        $staffIds = $shop->staff_id ?? [];
+        $staffIds[] = $request->id;
+        $shop->update(['staff_id' => $staffIds]);
+        return redirect()->route('staff.index')->with('success', 'Staff added successfully');
+    }
+
+    public function store(Request $request) {
+        $branch = Branch::findOrFail($request->branch_id);
+        $saveData['user_id'] = $request->user_id;
+        $updated = Branch::where('id', $branch->id)->update([
+            'user_id' => json_encode($saveData['user_id'])
+        ]);
+        if ($updated) {
+            return response()->json([
+                'status'  => 'Success',
+                'message' => 'Data saved'
+            ], 200);
+        } else {
+            return response()->json([
+                'status'  => 'Error',
+                'message' => 'Failed to update data.'
+            ], 400);
+        }
     }
 }

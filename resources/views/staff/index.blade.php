@@ -5,6 +5,7 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
 @endsection
 
 @section('content')
@@ -49,7 +50,6 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Branches</th>
-                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -122,6 +122,8 @@
     <script src="{{ asset('assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/toastr-init.js') }}"></script>
     <script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
+
     <script>
         $(document).ready(function() {
             $('#datatable').DataTable({
@@ -131,20 +133,13 @@
                     url: '/staff/data',
                     type: 'GET'
                 },
-                columns: [
-                    {
+                columns: [{
                         data: 'name',
                         name: 'name'
                     },
                     {
                         data: 'branches',
                         name: 'branches'
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false
                     }
                 ],
                 columnDefs: [{
@@ -168,9 +163,13 @@
             let id = $(e.relatedTarget).data('id')
             $.ajax({
                 type: 'get',
-                url: `/category/${id}/edit`,
+                url: `/staff/${id}/edit`,
                 success: function(data) {
-                    $('.category-body-edit').html(data);
+                    $('.category-body-edit').html(data)
+                    $('.select2').select2({
+                        placeholder: "Select Branches",
+                        dropdownParent: $('#edit')
+                    })
                 }
             })
         })
@@ -205,7 +204,7 @@
             e.preventDefault()
             let formData = new FormData(this);
             $.ajax({
-                url: `/category/${formData.get('id')}`,
+                url: `/staff/${formData.get('id')}/editBranch`,
                 type: "POST",
                 data: formData,
                 headers: {
