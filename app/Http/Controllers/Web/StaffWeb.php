@@ -95,8 +95,9 @@ class StaffWeb extends Controller
     public function store(Request $request) {
         $branch = Branch::findOrFail($request->branch_id);
         $saveData['user_id'] = $request->user_id;
+        $saveData['user_id'] = array_map('intval', $saveData['user_id']);
         $updated = Branch::where('id', $branch->id)->update([
-            'user_id' => json_encode($saveData['user_id'])
+            'user_id' => $saveData['user_id']
         ]);
         if ($updated) {
             return response()->json([

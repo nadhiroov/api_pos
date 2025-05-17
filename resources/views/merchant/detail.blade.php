@@ -241,7 +241,7 @@
                 success: function(data) {
                     $('.modal-body-add-staff').html(data)
                     $('.select2').select2({
-                        placeholder: "Select Branches",
+                        placeholder: "Select staffs",
                         dropdownParent: $('#add-new-staff')
                     })
                 }

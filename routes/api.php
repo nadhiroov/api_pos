@@ -17,3 +17,4 @@ Route::apiResource('transaction', TransactionController::class)->middleware('aut
 Route::post('/branches/{branch}/transactions', [TransactionController::class, 'addTransaction'])->middleware('auth:sanctum');
 Route::get('/transactions/filter', [TransactionController::class, 'getTransactionsByYearAndBranch'])->middleware('auth:sanctum');
 Route::get('/products', [ProductController::class, 'index'])->middleware('auth:sanctum');
+Route::apiResource('/category', TransactionController::class)->middleware('auth:sanctum');

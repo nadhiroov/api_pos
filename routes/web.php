@@ -23,6 +23,10 @@ Route::get('/forgot', function () {
 Route::post('/authenticate', [AuthWeb::class, 'login']);
 Route::get('/logout', [AuthWeb::class, 'logout']);
 
+// show image
+Route::get('/product/image/{filename}', [ProductWeb::class, 'showImage'])
+    ->name('product.image');
+
 Route::middleware(isLogin::class)->group(
     function () {
         Route::get('/', [Dashboard::class, 'dashboard']);
@@ -59,8 +63,8 @@ Route::middleware(isLogin::class)->group(
             Route::get('{id}/add', [ProductWeb::class, 'add'])->name('add');
             Route::post('/uploadImage', [ProductWeb::class, 'uploadImage'])
                 ->name('uploadImage');
-            Route::get('/image/{filename}', [ProductWeb::class, 'showImage'])
-                ->name('image');
+            // Route::get('/image/{filename}', [ProductWeb::class, 'showImage'])
+            //     ->name('image');
         });
         Route::resource('product', ProductWeb::class);
 

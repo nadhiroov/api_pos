@@ -26,7 +26,6 @@ class CategoryWeb extends Controller
     public function show(Request $request)
     {
         $user = Auth::user();
-
         $categories = Category::query()
             ->whereHas('shop', function ($query) use ($user) {
                 $query->where('user_id', $user->id);
