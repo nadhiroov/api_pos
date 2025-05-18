@@ -37,7 +37,7 @@ class AuthService
         }
         $dataUser["shop_id"] = $dataUser->shop_id;
         $dataUser["role"] = $role;
-        $dataUser["branches"] = $branches;
+        $dataUser["branches"] = $branches ?? null;
         return [
             "status"        => true,
             "dataUser"      => $dataUser
