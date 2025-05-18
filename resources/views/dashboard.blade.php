@@ -27,7 +27,7 @@
                 <div class="card border-0 zoom-in bg-warning-subtle shadow-none">
                     <div class="card-body">
                         <div class="text-center">
-                            <img src="../assets/images/svgs/icon-dd-invoice.svg" width="50" height="50"
+                            <img src="../assets/images/svgs/icon-speech-bubble.svg" width="50" height="50"
                                 class="mb-3" alt="modernize-img" />
                             <p class="fw-semibold fs-3 text-warning mb-1">Transactions</p>
                             <h5 class="fw-semibold text-warning mb-0"> {{ $countTransaction }} </h5>
@@ -39,7 +39,7 @@
                 <div class="card border-0 zoom-in bg-info-subtle shadow-none">
                     <div class="card-body">
                         <div class="text-center">
-                            <img src="../assets/images/svgs/icon-dd-cart.svg" width="50" height="50" class="mb-3"
+                            <img src="../assets/images/svgs/icon-tasks.svg" width="50" height="50" class="mb-3"
                                 alt="modernize-img" />
                             <p class="fw-semibold fs-3 text-info mb-1">Products</p>
                             <h5 class="fw-semibold text-info mb-0"> {{ $countProduct }} </h5>
@@ -63,7 +63,7 @@
                 <div class="card border-0 zoom-in bg-success-subtle shadow-none">
                     <div class="card-body">
                         <div class="text-center">
-                            <img src="../assets/images/svgs/icon-speech-bubble.svg" width="50" height="50"
+                            <img src="../assets/images/svgs/icon-dd-invoice.svg" width="50" height="50"
                                 class="mb-3" alt="modernize-img" />
                             <p class="fw-semibold fs-3 text-success mb-1">Income</p>
                             <h5 class="fw-semibold text-success mb-0"> Rp. {{ number_format($countIncome, 0, ',', '.') }} </h5>
@@ -75,7 +75,7 @@
                 <div class="card border-0 zoom-in bg-info-subtle shadow-none">
                     <div class="card-body">
                         <div class="text-center">
-                            <img src="../assets/images/svgs/icon-connect.svg" width="50" height="50" class="mb-3"
+                            <img src="../assets/images/svgs/icon-dd-cart.svg" width="50" height="50" class="mb-3"
                                 alt="modernize-img" />
                             <p class="fw-semibold fs-3 text-info mb-1">Sold Item</p>
                             <h5 class="fw-semibold text-info mb-0"> {{ $countItems }} </h5>
