@@ -31,10 +31,11 @@ class AuthService
         $rolesCollect = collect($role);
         if ($rolesCollect->contains("owner")) {
             $branches = Branch::whereIn('shop_id', Shop::where('user_id', $dataUser->id)->pluck('id'))
-                ->select('id', 'name')->get();
+                ->select('id', 'name', 'shop_id')->get();
         } elseif ($rolesCollect->contains("cashier")) {
-            $branches = Branch::whereJsonContains('user_id', $dataUser->id)->get();
+            $branches = Branch::whereJsonContains('user_id', $dataUser->id)->select('id','name', 'shop_id')->get();
         }
+        $dataUser["shop_id"] = $dataUser->shop_id;
         $dataUser["role"] = $role;
         $dataUser["branches"] = $branches;
         return [

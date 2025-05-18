@@ -48,34 +48,24 @@ class TransactionController extends Controller
     public function addTransaction(Request $request, $branchId)
     {
         $year = now()->year;
-
-        // Validasi input
         $data = $request->validate([
-            'transaction_id' => 'required|string',
-            'date' => 'required|date',
-            'cashier' => 'required|string',
-            'items' => 'required|array',
+            'cashier_id' => 'required|exists:users,id',
+            'paid' => 'required|numeric',
             'total' => 'required|numeric',
             'payment_method' => 'required|string',
+            'items' => 'required|array',
         ]);
-
-        // Ambil record transaction berdasarkan branch dan tahun
+        $data['date'] = now()->format('Y-m-d H:i:s');
+        $data['transaction_id'] = "TX-" . now()->format('YmdHis');
         $trx = \App\Models\Transaction::firstOrCreate(
             ['branch_id' => $branchId, 'year' => $year],
-            ['transaction' => []] // default kalau belum ada
+            ['transaction' => []]
         );
-
-        // Ambil transaksi sebelumnya
         $currentTransactions = $trx->transaction ?? [];
-
-        // Tambah transaksi baru ke array
         $currentTransactions[] = $data;
-
-        // Update field transaction
         $trx->update([
             'transaction' => $currentTransactions
         ]);
-
         return response()->json([
             'message' => 'Transaction added successfully',
             'data' => $data

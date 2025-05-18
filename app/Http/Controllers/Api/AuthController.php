@@ -59,6 +59,7 @@ class AuthController extends Controller
                 "data"      => [
                     "id"        => $data["dataUser"]["id"],
                     "username"  => $data["dataUser"]["username"],
+                    "name"      => $data["dataUser"]["name"],
                     "email"     => $data["dataUser"]["email"] ?? '-',
                     "role"      => $data["dataUser"]["role"],
                     "branches"  => $data["dataUser"]["branches"] ?? '-',
@@ -71,25 +72,4 @@ class AuthController extends Controller
             ], $data['http']);
         }
     }
-
-    /* if (!Auth::attempt($data)) {
-            return response()->json([
-                "message" => "Username or password incorrect"
-            ], 401);
-        }
-        $dataUser = User::where('username', $data['username'])->first();
-        $role = Role::join("user_role as ur", "ur.role_id", "=", "roles.id")
-            ->join("users as u", "u.id", "=", "ur.user_id")
-            ->where("user_id", $dataUser->id)
-            ->pluck("roles.role_name")->toArray();
-        if (empty($role)) {
-            $role = ["cashier"];
-        }
-        $rolesCollect = collect($role);
-        if ($rolesCollect->contains("owner")) {
-            $branches = Branch::whereIn('shop_id', Shop::where('user_id', $dataUser->id)->pluck('id'))
-                ->select('id', 'name')->get();
-        } elseif ($rolesCollect->contains("cashier")) {
-            $branches = Branch::whereJsonContains('user_id', $dataUser->id)->get();
-        } */
 }

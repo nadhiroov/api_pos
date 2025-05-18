@@ -67,14 +67,16 @@
                         <span class="hide-menu">Product</span>
                     </a>
                 </li>
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/staff" id="get-url" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-users"></i>
-                        </span>
-                        <span class="hide-menu">Staff</span>
-                    </a>
-                </li>
+                @if (auth()->user()->hasRole(['admin']))
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/staff" id="get-url" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-users"></i>
+                            </span>
+                            <span class="hide-menu">Staff</span>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </nav>
 

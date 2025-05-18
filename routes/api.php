@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\ShopController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProductController;
@@ -17,4 +18,4 @@ Route::apiResource('transaction', TransactionController::class)->middleware('aut
 Route::post('/branches/{branch}/transactions', [TransactionController::class, 'addTransaction'])->middleware('auth:sanctum');
 Route::get('/transactions/filter', [TransactionController::class, 'getTransactionsByYearAndBranch'])->middleware('auth:sanctum');
 Route::get('/products', [ProductController::class, 'index'])->middleware('auth:sanctum');
-Route::apiResource('/category', TransactionController::class)->middleware('auth:sanctum');
+Route::apiResource('/categories', CategoryController::class)->middleware('auth:sanctum');
