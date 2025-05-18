@@ -18,7 +18,7 @@
                             <p class="fw-semibold fs-3 text-primary mb-1">
                                 Employees
                             </p>
-                            <h5 class="fw-semibold text-primary mb-0">96</h5>
+                            <h5 class="fw-semibold text-primary mb-0"> {{ $countStaff }} </h5>
                         </div>
                     </div>
                 </div>
@@ -27,10 +27,10 @@
                 <div class="card border-0 zoom-in bg-warning-subtle shadow-none">
                     <div class="card-body">
                         <div class="text-center">
-                            <img src="../assets/images/svgs/icon-briefcase.svg" width="50" height="50" class="mb-3"
-                                alt="modernize-img" />
-                            <p class="fw-semibold fs-3 text-warning mb-1">Clients</p>
-                            <h5 class="fw-semibold text-warning mb-0">3,650</h5>
+                            <img src="../assets/images/svgs/icon-dd-invoice.svg" width="50" height="50"
+                                class="mb-3" alt="modernize-img" />
+                            <p class="fw-semibold fs-3 text-warning mb-1">Transactions</p>
+                            <h5 class="fw-semibold text-warning mb-0"> {{ $countTransaction }} </h5>
                         </div>
                     </div>
                 </div>
@@ -39,10 +39,10 @@
                 <div class="card border-0 zoom-in bg-info-subtle shadow-none">
                     <div class="card-body">
                         <div class="text-center">
-                            <img src="../assets/images/svgs/icon-mailbox.svg" width="50" height="50" class="mb-3"
+                            <img src="../assets/images/svgs/icon-dd-cart.svg" width="50" height="50" class="mb-3"
                                 alt="modernize-img" />
-                            <p class="fw-semibold fs-3 text-info mb-1">Projects</p>
-                            <h5 class="fw-semibold text-info mb-0">356</h5>
+                            <p class="fw-semibold fs-3 text-info mb-1">Products</p>
+                            <h5 class="fw-semibold text-info mb-0"> {{ $countProduct }} </h5>
                         </div>
                     </div>
                 </div>
@@ -51,10 +51,10 @@
                 <div class="card border-0 zoom-in bg-danger-subtle shadow-none">
                     <div class="card-body">
                         <div class="text-center">
-                            <img src="../assets/images/svgs/icon-favorites.svg" width="50" height="50" class="mb-3"
+                            <img src="../assets/images/svgs/icon-connect.svg" width="50" height="50" class="mb-3"
                                 alt="modernize-img" />
-                            <p class="fw-semibold fs-3 text-danger mb-1">Events</p>
-                            <h5 class="fw-semibold text-danger mb-0">696</h5>
+                            <p class="fw-semibold fs-3 text-danger mb-1">Branches</p>
+                            <h5 class="fw-semibold text-danger mb-0"> {{ $countBranch }} </h5>
                         </div>
                     </div>
                 </div>
@@ -65,8 +65,8 @@
                         <div class="text-center">
                             <img src="../assets/images/svgs/icon-speech-bubble.svg" width="50" height="50"
                                 class="mb-3" alt="modernize-img" />
-                            <p class="fw-semibold fs-3 text-success mb-1">Payroll</p>
-                            <h5 class="fw-semibold text-success mb-0">$96k</h5>
+                            <p class="fw-semibold fs-3 text-success mb-1">Income</p>
+                            <h5 class="fw-semibold text-success mb-0"> Rp. {{ number_format($countIncome, 0, ',', '.') }} </h5>
                         </div>
                     </div>
                 </div>
@@ -77,8 +77,8 @@
                         <div class="text-center">
                             <img src="../assets/images/svgs/icon-connect.svg" width="50" height="50" class="mb-3"
                                 alt="modernize-img" />
-                            <p class="fw-semibold fs-3 text-info mb-1">Reports</p>
-                            <h5 class="fw-semibold text-info mb-0">59</h5>
+                            <p class="fw-semibold fs-3 text-info mb-1">Sold Item</p>
+                            <h5 class="fw-semibold text-info mb-0"> {{ $countItems }} </h5>
                         </div>
                     </div>
                 </div>
