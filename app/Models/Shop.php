@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Shop extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['user_id', 'name', 'address', 'phone', 'logo', 'code','staff_id'];
+    protected $fillable = ['user_id', 'name', 'address', 'phone', 'logo', 'code', 'staff_id'];
     protected $casts = [
         'staff_id' => 'array',
     ];

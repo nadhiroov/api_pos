@@ -38,9 +38,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between mb-4 pb-8">
-                    <h4 class="card-title">Categories</h4>
+                    <h4 class="card-title">All staffs</h4>
                     <div class="d-flex">
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_new">Add new</button>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_new">Manage</button>
                     </div>
                 </div>
                 <br>
@@ -49,7 +49,8 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
-                                <th>Branches</th>
+                                <th>Roles</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -138,13 +139,18 @@
                         name: 'name'
                     },
                     {
-                        data: 'branches',
-                        name: 'branches'
+                        data: 'roles',
+                        name: 'roles'
+                    },
+                    {
+                        data: 'action',
+                        name: 'action'
                     }
                 ],
                 columnDefs: [{
                     width: '20%',
-                    targets: 1
+                    targets: 2,
+                    orderable: false,
                 }]
             })
         })

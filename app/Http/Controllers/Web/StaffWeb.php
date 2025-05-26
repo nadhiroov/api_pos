@@ -21,7 +21,6 @@ class StaffWeb extends Controller
     public function index()
     {
         $user = Auth::user();
-        // 1. Ambil shop beserta semua branch-nya
         return view('staff.index', [
             'title' => $this->title,
         ]);
@@ -61,20 +60,27 @@ class StaffWeb extends Controller
         $user = Auth::user();
         $shop = Shop::with('branches')->where('user_id', $user->id)->first();
         $staffIds = $shop->staff_id ?? [];
-        $staffs = User::whereIn('id', $staffIds)->get();
+        $staffs   = $staffIds
+            ? User::with('fullRoles')
+            ->whereIn('id', $staffIds)
+            ->get()
+            : collect();
         return DataTables::of($staffs)
             ->addIndexColumn()
-            ->addColumn('name', fn(User $u) => $u->name)
-            ->addColumn('email', fn(User $u) => $u->email)
-            ->addColumn('branches', function (User $u) use ($shop) {
-                $badges = $shop->branches
-                    ->filter(fn($b) => in_array($u->id, $b->user_id ?? []))
-                    ->map(fn($b) => '<span class="badge text-bg-success">' . e($b->name) . '</span>')
+            ->addColumn('name', fn (User $u) =>  $u->name)
+            ->addColumn('roles', function (User $u) {
+                return $u->fullRoles
+                    ->pluck('role_name')
+                    ->map(fn($r) => "<span class=\"badge text-bg-success\">" . e($r) . "</span>")
                     ->implode(' ');
-
-                return $badges ?: '<span class="text-muted">—</span>';
             })
-            ->rawColumns(['branches'])
+            ->addColumn('action', function (User $u) {
+                return
+                '<div class="d-flex align-items-center gap-2">
+                <a href="' . route('product.edit', $u->id) . '" class="btn bg-warning-subtle text-warning"><i class="ti ti-edit fs-4 me-2"></i></a>
+                </div>';
+            })
+            ->rawColumns(['roles', 'action'])
             ->make(true);
     }
 

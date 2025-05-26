@@ -45,4 +45,9 @@ class User extends Authenticatable
         }
         return $this->roles->contains('role_name', $roles);
     }
+
+    public function fullRoles()
+    {
+        return $this->hasManyThrough(Role::class, UserRole::class, 'user_id', 'id', 'id', 'role_id');
+    }
 }
