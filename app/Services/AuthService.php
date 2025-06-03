@@ -29,6 +29,7 @@ class AuthService
             $role = ["cashier"];
         }
         $rolesCollect = collect($role);
+        $shop_id = null;
         if ($rolesCollect->contains("owner")) {
             $shopIds = Shop::where('user_id', $dataUser->id);
             $branches = Branch::whereIn('shop_id', $shopIds->pluck('id'))
