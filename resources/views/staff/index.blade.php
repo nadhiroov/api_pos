@@ -39,9 +39,6 @@
             <div class="card-body">
                 <div class="d-flex align-items-center justify-content-between mb-4 pb-8">
                     <h4 class="card-title">All staffs</h4>
-                    <div class="d-flex">
-                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_new">Manage</button>
-                    </div>
                 </div>
                 <br>
                 <div class="table-responsive">
@@ -60,34 +57,7 @@
             </div>
         </div>
     </div>
-    {{-- modal add new --}}
-    <div class="modal fade" id="add_new" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
-        style="display: none;">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <form action="/category" method="POST" class="form-process-add">
-                    <div class="modal-header d-flex align-items-center">
-                        <h4 class="modal-title" id="myModalLabel">
-                            Add new data
-                        </h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body category-body-add">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn bg-danger-subtle text-danger  waves-effect"
-                            data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" class="btn bg-secondary-subtle text-secondary  waves-effect"
-                            data-bs-dismiss="modal">
-                            Save
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    
     {{-- modal edit --}}
     <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
         style="display: none;">
@@ -100,7 +70,7 @@
                         </h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body category-body-edit">
+                    <div class="modal-body staff-body-edit">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn bg-danger-subtle text-danger  waves-effect"
@@ -155,16 +125,6 @@
             })
         })
 
-        $('#add_new').on('show.bs.modal', function(e) {
-            $.ajax({
-                type: 'get',
-                url: '/category/add',
-                success: function(data) {
-                    $('.category-body-add').html(data);
-                }
-            })
-        })
-
         $('#edit').on('show.bs.modal', function(e) {
             let id = $(e.relatedTarget).data('id')
             $.ajax({
@@ -177,32 +137,6 @@
                         dropdownParent: $('#edit')
                     })
                 }
-            })
-        })
-
-        $(".form-process-add").on('submit', function(e) {
-            e.preventDefault()
-            let formData = new FormData(this);
-            $.ajax({
-                url: '/category',
-                type: "post",
-                data: formData,
-                processData: false,
-                contentType: false,
-                dataType: "json",
-                cache: false,
-                async: false,
-                success: function(response = "") {
-                    if (response.status == 'Success') {
-                        toastr.success(response.message, response.status);
-                    } else {
-                        toastr.error(response.message, response.status);
-                    }
-                    $('#datatable').DataTable().ajax.reload(null, false);
-                },
-                error: function(response) {
-                    toastr.error(response.message, response.status);
-                },
             })
         })
 

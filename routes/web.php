@@ -70,7 +70,7 @@ Route::middleware(isLogin::class)->group(
 
         // staff
         Route::prefix('staff')->name('staff.')->group(function () {
-            Route::post('/{id}/editBranch', [StaffWeb::class, 'editBranch']);
+            Route::post('/{id}/editRole', [StaffWeb::class, 'editBranch']);
             Route::get('/{id}/add', [StaffWeb::class, 'add']);
             Route::post('/{id}/add', [StaffWeb::class, 'store']);
         });

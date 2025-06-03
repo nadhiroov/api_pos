@@ -44,10 +44,11 @@ class StaffWeb extends Controller
     public function edit($id = '')
     {
         $user = Auth::user();
-        // $shop = Shop::with('branches')->where('user_id', $user->id)->first();
-        // echo $shop;die;
-        $shop = Shop::where('user_id', $user->id)->first();
-        $branches = Branch::where('shop_id', $shop->id)->get();
+        // $roles = 
+        // $shop = Shop::where('user_id', $user->id)->first();
+        // $branches = Branch::where('shop_id', $shop->id)->get();
+        $userRole = User::with('fullRoles')->findOrFail($id);
+        dd($userRole);
         return view('staff.edit', [
             'title'   => $this->title,
             'data'    => $branches,
@@ -67,7 +68,7 @@ class StaffWeb extends Controller
             : collect();
         return DataTables::of($staffs)
             ->addIndexColumn()
-            ->addColumn('name', fn (User $u) =>  $u->name)
+            ->addColumn('name', fn(User $u) =>  $u->name)
             ->addColumn('roles', function (User $u) {
                 return $u->fullRoles
                     ->pluck('role_name')
@@ -76,15 +77,15 @@ class StaffWeb extends Controller
             })
             ->addColumn('action', function (User $u) {
                 return
-                '<div class="d-flex align-items-center gap-2">
-                <a href="' . route('product.edit', $u->id) . '" class="btn bg-warning-subtle text-warning"><i class="ti ti-edit fs-4 me-2"></i></a>
+                    '<div class="d-flex align-items-center gap-2">
+                <button data-bs-toggle="modal" data-bs-target="#edit" data-id="' . $u->id . '" class="btn bg-warning-subtle text-warning"><i class="ti ti-edit fs-4 me-2"></i></button>
                 </div>';
             })
             ->rawColumns(['roles', 'action'])
             ->make(true);
     }
 
-    public function editBranch(Request $request)
+    public function editRole(Request $request)
     {
         $user = Auth::user();
         dd($request['branches_id']);
@@ -98,7 +99,8 @@ class StaffWeb extends Controller
         return redirect()->route('staff.index')->with('success', 'Staff added successfully');
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $branch = Branch::findOrFail($request->branch_id);
         $saveData['user_id'] = $request->user_id;
         $saveData['user_id'] = array_map('intval', $saveData['user_id']);
