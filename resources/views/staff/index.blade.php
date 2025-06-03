@@ -61,7 +61,7 @@
     {{-- modal edit --}}
     <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
         style="display: none;">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <form action="/category" method="PATCH" class="form-process-edit">
                     <div class="modal-header d-flex align-items-center">
@@ -131,9 +131,9 @@
                 type: 'get',
                 url: `/staff/${id}/edit`,
                 success: function(data) {
-                    $('.category-body-edit').html(data)
+                    $('.staff-body-edit').html(data)
                     $('.select2').select2({
-                        placeholder: "Select Branches",
+                        placeholder: "Select roles",
                         dropdownParent: $('#edit')
                     })
                 }
@@ -142,9 +142,11 @@
 
         $(".form-process-edit").on('submit', function(e) {
             e.preventDefault()
-            let formData = new FormData(this);
+            let formData = new FormData(this)
+            let id = formData.get('id')
+            formData.append('_method', 'PUT');
             $.ajax({
-                url: `/staff/${formData.get('id')}/editBranch`,
+                url: `/staff/${id}`,
                 type: "POST",
                 data: formData,
                 headers: {

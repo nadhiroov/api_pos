@@ -4,9 +4,10 @@ namespace App\Http\Controllers\Web;
 
 use App\Models\Shop;
 use App\Models\User;
-use App\Http\Controllers\Controller;
 use App\Models\Branch;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -44,15 +45,15 @@ class StaffWeb extends Controller
     public function edit($id = '')
     {
         $user = Auth::user();
-        // $roles = 
-        // $shop = Shop::where('user_id', $user->id)->first();
-        // $branches = Branch::where('shop_id', $shop->id)->get();
+        $roles = DB::table('roles')
+            ->where('role_name', '!=', 'admin')
+            ->get();
         $userRole = User::with('fullRoles')->findOrFail($id);
-        dd($userRole);
+        // echo $userRole;die;
         return view('staff.edit', [
             'title'   => $this->title,
-            'data'    => $branches,
-            'user_id' => $id,
+            'roles'    => $roles,
+            'userRoles' => $userRole,
         ]);
     }
 
@@ -117,6 +118,29 @@ class StaffWeb extends Controller
                 'status'  => 'Error',
                 'message' => 'Failed to update data.'
             ], 400);
+        }
+    }
+
+    public function update(Request $request, $id) {
+        $validated = $request->validate([
+            'branches_id'   => ['required', 'array'],
+            'branches_id.*' => ['integer', 'exists:roles,id'],
+        ]);
+
+        $userRole = User::with('fullRoles')->findOrFail($id);
+        try {
+            // Sinkronkan role (menghapus role lama, ganti dengan yang baru)
+            $userRole->roles()->sync($validated['branches_id']);
+
+            return response()->json([
+                'status'  => 'Success',
+                'message' => 'Roles updated successfully.'
+            ]);
+        } catch (\Throwable $e) {
+            return response()->json([
+                'status'  => 'Error',
+                'message' => 'Failed to update roles: ' . $e->getMessage(),
+            ], 500);
         }
     }
 }

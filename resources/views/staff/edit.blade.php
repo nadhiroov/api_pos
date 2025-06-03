@@ -2,12 +2,13 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <div class="mt-7 mb-3">
-    <label class="form-label">Branches</label>
+    <label class="form-label">Roles</label>
     <select class="select2 form-control" name="branches_id[]" multiple>
         <option></option>
-        @foreach ($data as $branch)
-            <option @if($branch->user_id != null && in_array($user_id, $branch->user_id)) selected @endif value="{{ $branch->id }}">{{ $branch->name }}</option>
+        @foreach ($roles as $role)
+            <option value="{{ $role->id }}" @if(in_array($role->id, $userRoles->roles->pluck('id')->toArray())) selected @endif>
+                {{ $role->role_name }}
         @endforeach
     </select>
 </div>
-<input type="hidden" name="id" value="{{ $user_id }}">
+<input type="hidden" name="id" value="{{ $userRoles->id }}">
