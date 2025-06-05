@@ -80,7 +80,7 @@ class AuthController extends Controller
                     "email"     => $data["dataUser"]["email"] ?? '-',
                     "role"      => $data["dataUser"]["role"],
                     "shop"      => $data["dataUser"]["shop"] ?? '-',
-                    "branches"  => $data["dataUser"]["branches"] ?? '-',
+                    "branches"  => $data["dataUser"]["branches"] ?? [],
                     "token"     => $token->plainTextToken
                 ]
             ], 200);
