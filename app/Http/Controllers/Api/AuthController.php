@@ -66,9 +66,6 @@ class AuthController extends Controller
     {
         $data = $request->validated();
         $data = $this->authService->login($data);
-        // return response()->json([
-        //     'message'   => $data
-        // ]);
         if ($data['status']) {
             $token = $data['dataUser']->createToken("api", $data["dataUser"]["role"]);
             return response()->json([
