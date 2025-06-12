@@ -11,14 +11,14 @@ class Transaction extends Model
 {
     use HasFactory;
     protected $fillable = ['branch_id', 'year', 'transaction'];
-    protected $casts = ['transaction' => 'array'];
+    // protected $casts = ['transaction' => 'array'];
 
-    /* protected function casts(): array
+    protected function casts(): array
     {
         return [
             'transaction' => 'array',
         ];
-    } */
+    }
 
     /* protected function casts(): array
     {

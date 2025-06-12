@@ -9,7 +9,8 @@ use App\Http\Controllers\Web\Dashboard;
 use App\Http\Controllers\Web\ProductWeb;
 use App\Http\Controllers\Web\CategoryWeb;
 use App\Http\Controllers\Web\MerchantWeb;
-use App\Http\Middleware\CheckRole;
+use App\Http\Controllers\Web\Report;
+use App\Http\Controllers\Web\TransactionWeb;
 
 // auth
 Route::get('/login', [AuthWeb::class, 'loginPage']);
@@ -63,8 +64,6 @@ Route::middleware(isLogin::class)->group(
             Route::get('{id}/add', [ProductWeb::class, 'add'])->name('add');
             Route::post('/uploadImage', [ProductWeb::class, 'uploadImage'])
                 ->name('uploadImage');
-            // Route::get('/image/{filename}', [ProductWeb::class, 'showImage'])
-            //     ->name('image');
         });
         Route::resource('product', ProductWeb::class);
 
@@ -75,5 +74,17 @@ Route::middleware(isLogin::class)->group(
             Route::post('/{id}/add', [StaffWeb::class, 'store']);
         });
         Route::resource('staff', StaffWeb::class);
+
+        // transaction
+        Route::prefix('transaction')->name('transaction.')->group(function () {
+            Route::get('/data', [TransactionWeb::class, 'show']);
+        });
+        Route::resource('transaction', TransactionWeb::class);
+
+        // report
+        Route::prefix('report')->name('report.')->group(function () {
+            
+        });
+        Route::resource('report', Report::class);
     }
 );

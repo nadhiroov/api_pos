@@ -933,8 +933,8 @@
                 <ul class="mb-0">
                     <li class="pb-7">
                         <div class="d-flex align-items-center">
-                            <img src="{{ asset('assets/images/products/product-1.jpg') }}" width="95" height="75"
-                                class="rounded-1 me-9 flex-shrink-0" alt="modernize-img" />
+                            <img src="{{ asset('assets/images/products/product-1.jpg') }}" width="95"
+                                height="75" class="rounded-1 me-9 flex-shrink-0" alt="modernize-img" />
                             <div>
                                 <h6 class="mb-1">Supreme toys cooker</h6>
                                 <p class="mb-0 text-muted fs-2">Kitchenware Item</p>
@@ -960,8 +960,8 @@
                     </li>
                     <li class="pb-7">
                         <div class="d-flex align-items-center">
-                            <img src="{{ asset('assets/images/products/product-1.jpg') }}" width="95" height="75"
-                                class="rounded-1 me-9 flex-shrink-0" alt="modernize-img" />
+                            <img src="{{ asset('assets/images/products/product-1.jpg') }}" width="95"
+                                height="75" class="rounded-1 me-9 flex-shrink-0" alt="modernize-img" />
                             <div>
                                 <h6 class="mb-1">Supreme toys cooker</h6>
                                 <p class="mb-0 text-muted fs-2">Kitchenware Item</p>
@@ -987,8 +987,8 @@
                     </li>
                     <li class="pb-7">
                         <div class="d-flex align-items-center">
-                            <img src="{{ asset('assets/images/products/product-1.jpg') }}" width="95" height="75"
-                                class="rounded-1 me-9 flex-shrink-0" alt="modernize-img" />
+                            <img src="{{ asset('assets/images/products/product-1.jpg') }}" width="95"
+                                height="75" class="rounded-1 me-9 flex-shrink-0" alt="modernize-img" />
                             <div>
                                 <h6 class="mb-1">Supreme toys cooker</h6>
                                 <p class="mb-0 text-muted fs-2">Kitchenware Item</p>
@@ -1043,7 +1043,7 @@
     <script src="{{ asset('process.js') }}"></script>
 
     <!-- solar icons -->
-    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.0.8/dist/iconify-icon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/iconify-icon@1.3.2/dist/iconify-icon.min.js"></script>
     {{-- <script src="{{ asset('assets/js/plugins/animation-init.js') }}"></script> --}}
     @yield('script')
 </body>

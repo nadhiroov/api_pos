@@ -51,7 +51,7 @@
                         </a>
                     </li>
                 @endif
-                @if (auth()->user()->hasRole(['warehouse', 'admin', 'owner']))
+                @if (auth()->user()->hasRole(['admin', 'owner']))
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="/merchant" id="get-url" aria-expanded="false">
                             <span>
@@ -61,14 +61,36 @@
                         </a>
                     </li>
                 @endif
-                <li class="sidebar-item">
-                    <a class="sidebar-link" href="/product" id="get-url" aria-expanded="false">
-                        <span>
-                            <i class="ti ti-shopping-cart"></i>
-                        </span>
-                        <span class="hide-menu">Product</span>
-                    </a>
-                </li>
+                @if (auth()->user()->hasRole(['warehouse', 'admin', 'owner']))
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/product" id="get-url" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-package"></i>
+                            </span>
+                            <span class="hide-menu">Product</span>
+                        </a>
+                    </li>
+                @endif
+                @if (auth()->user()->hasRole(['warehouse', 'admin', 'owner']))
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/transaction" id="get-url" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-shopping-cart"></i>
+                            </span>
+                            <span class="hide-menu">Transaction</span>
+                        </a>
+                    </li>
+                @endif
+                @if (auth()->user()->hasRole(['warehouse', 'admin', 'owner']))
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/report" id="get-url" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-chart-area-line"></i>
+                            </span>
+                            <span class="hide-menu">Report</span>
+                        </a>
+                    </li>
+                @endif
                 @if (auth()->user()->hasRole(['admin', 'owner']))
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="/staff" id="get-url" aria-expanded="false">
