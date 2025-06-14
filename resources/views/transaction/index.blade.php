@@ -82,7 +82,7 @@
             </div>
         </div>
     </div>
-    {{-- modal add new --}}
+    {{-- modal detail --}}
     <div class="modal fade" id="detail" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
         style="display: none;">
         <div class="modal-dialog modal-md">
@@ -97,8 +97,7 @@
                     <div class="modal-body modal-body-detail">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn bg-info-subtle text-info  waves-effect"
-                            data-bs-dismiss="modal">
+                        <button type="button" class="btn bg-info-subtle text-info  waves-effect" data-bs-dismiss="modal">
                             Close
                         </button>
                     </div>
@@ -216,7 +215,17 @@
                     transaction_id: data.trx_index,
                     id: data.id
                 },
+                beforeSend: function() {
+                    $('.modal-body-detail').html(
+                        `<div class="text-center">
+                            <div class="spinner-grow" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>`
+                    )
+                },
                 success: function(data) {
+                    $('.modal-body-detail').removeClass('text-center')
                     $('.modal-body-detail').html(data)
                 }
             })
