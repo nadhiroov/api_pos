@@ -78,6 +78,7 @@ Route::middleware(isLogin::class)->group(
         // transaction
         Route::prefix('transaction')->name('transaction.')->group(function () {
             Route::get('/data', [TransactionWeb::class, 'show']);
+            Route::get('/detail', [TransactionWeb::class, 'detail']);
         });
         Route::resource('transaction', TransactionWeb::class);
 

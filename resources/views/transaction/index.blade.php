@@ -94,16 +94,12 @@
                         </h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body modal-body-add">
+                    <div class="modal-body modal-body-detail">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn bg-danger-subtle text-danger  waves-effect"
+                        <button type="button" class="btn bg-info-subtle text-info  waves-effect"
                             data-bs-dismiss="modal">
                             Close
-                        </button>
-                        <button type="submit" class="btn bg-secondary-subtle text-secondary  waves-effect"
-                            data-bs-dismiss="modal">
-                            Save
                         </button>
                     </div>
                 </form>
@@ -138,7 +134,9 @@
             processing: true,
             serverSide: true,
             deferLoading: 0,
-            order: [[ 0, 'desc' ]],
+            order: [
+                [0, 'desc']
+            ],
             ajax: {
                 type: 'GET',
                 url: '/transaction/data',
@@ -196,9 +194,7 @@
             reloadIfValid()
         });
 
-        // saat user memilih range di picker (hanya sekali, bukan dua kali)
         $('.daterange').on('apply.daterangepicker', function(ev, picker) {
-            // update input dengan format yang kamu inginkan
             $(this).val(picker.startDate.format('DD-MM-YYYY') +
                 ' - ' +
                 picker.endDate.format('DD-MM-YYYY'))
@@ -207,13 +203,23 @@
 
         $('#btn-reset').on('click', function() {
             $('.daterange').val('')
-            // table.ajax.reload()
             table.clear().draw()
         })
 
         $('#detail').on('show.bs.modal', function(e) {
-            let id = $(e.relatedTarget).data('id')
-            console.log(id)
+            let data = $(e.relatedTarget).data('id')
+            // console.log(data.trx_index)
+            $.ajax({
+                type: 'get',
+                url: `/transaction/detail`,
+                data: {
+                    transaction_id: data.trx_index,
+                    id: data.id
+                },
+                success: function(data) {
+                    $('.modal-body-detail').html(data)
+                }
+            })
         })
     </script>
 @endsection
