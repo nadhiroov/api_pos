@@ -122,14 +122,11 @@
                 </div>
                 <div class="john-title">
                     <h6 class="mb-0 fs-4 fw-semibold">{{ auth()->user()->name }}</h6>
-                    <span class="fs-2">Designer</span>
+                    <span class="fs-2">{{ auth()->user()->roles->pluck('role_name')->join(', ') }}</span>
                 </div>
                 <a href="/logout" class="border-0 bg-transparent text-primary ms-auto" aria-label="logout"
                     data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout"><i
                         class="ti ti-power fs-6"></i></a>
-                {{-- <button class="border-0 bg-transparent text-primary ms-auto" tabindex="0" type="button" aria-label="logout" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout">
-              <i class="ti ti-power fs-6"></i>
-            </button> --}}
             </div>
         </div>
     </div>
