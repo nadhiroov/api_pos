@@ -9,6 +9,7 @@ use App\Http\Controllers\Web\Dashboard;
 use App\Http\Controllers\Web\ProductWeb;
 use App\Http\Controllers\Web\CategoryWeb;
 use App\Http\Controllers\Web\MerchantWeb;
+use App\Http\Controllers\Web\ProductHistoryWeb;
 use App\Http\Controllers\Web\Report;
 use App\Http\Controllers\Web\TransactionWeb;
 
@@ -62,6 +63,7 @@ Route::middleware(isLogin::class)->group(
         Route::prefix('product')->name('product.')->group(function () {
             Route::get('/add', [ProductWeb::class, 'add'])->name('addNew');
             Route::get('{id}/add', [ProductWeb::class, 'add'])->name('add');
+            Route::get('{id}/detail', [ProductWeb::class, 'detail'])->name('detail');
             Route::post('/uploadImage', [ProductWeb::class, 'uploadImage'])
                 ->name('uploadImage');
         });
@@ -83,9 +85,12 @@ Route::middleware(isLogin::class)->group(
         Route::resource('transaction', TransactionWeb::class);
 
         // report
-        Route::prefix('report')->name('report.')->group(function () {
-            
-        });
+        Route::prefix('report')->name('report.')->group(function () {});
         Route::resource('report', Report::class);
+
+        // product history
+        Route::post('/checkStock', [ProductHistoryWeb::class, 'checkStock']);
     }
 );
+Route::post('/product-history/check-stock', [ProductHistoryWeb::class, 'checkStock'])
+    ->name('product-history.checkStock');

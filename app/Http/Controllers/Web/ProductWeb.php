@@ -69,6 +69,30 @@ class ProductWeb extends Controller
         ]);
     }
 
+    public function detail($id = '')
+    {
+        $data = Product::with(['branch.shop'])->where('id', $id)->first();
+        // dd($data);
+        if (!$data) {
+            return redirect()->route('product.index')->with('error', 'Product not found');
+        }
+        if ($data->stock == null) {
+            $color = 'danger';
+        }else if ($data->stock <= 10) {
+            $color = 'danger';
+        } elseif ($data->stock <= 20) {
+            $color = 'warning';
+        } else {
+            $color = 'success';
+        }
+        return view('product.detail', [
+            'title' => 'Detail Product',
+            'data' => $data,
+            'stockColor' => $color,
+        ]);
+
+    }
+
     public function show(Request $request)
     {
         $user = Auth::user();
@@ -109,7 +133,7 @@ class ProductWeb extends Controller
             })
             ->addColumn('action', function ($product) {
                 return '<div class="d-flex align-items-center gap-2">
-                <a href="' . route('product.show', $product->id) . '" class="btn bg-info-subtle text-info"><i class="ti ti-zoom-exclamation fs-4 me-2"></i></a>
+                <a href="' . route('product.detail', $product->id) . '" class="btn bg-info-subtle text-info"><i class="ti ti-zoom-exclamation fs-4 me-2"></i></a>
                 <a href="' . route('product.edit', $product->id) . '" class="btn bg-warning-subtle text-warning"><i class="ti ti-edit fs-4 me-2"></i></a>
                 <a onclick="confirmDelete(this)" class="btn bg-danger-subtle text-danger" target="product" data-id="' . $product->id . '"><i class="ti ti-trash fs-4 me-2"></i></a>
                     </div>';

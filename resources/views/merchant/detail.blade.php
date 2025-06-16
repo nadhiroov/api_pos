@@ -107,12 +107,8 @@
                         <div class="d-sm-flex d-block align-items-center justify-content-between mb-3">
                             <div class="mb-3 mb-sm-0">
                                 <h4 class="card-title fw-semibold">Product</h4>
-                                {{-- <p class="card-subtitle">What Impacts Product Performance?</p> --}}
                             </div>
                             <div>
-                                {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_new">Add
-                                    new</button> --}}
-                                {{-- <a href="/product/add" class="btn btn-primary">Add new</a> --}}
                                 <a href="{{ route('product.add', $data->id) }}" class="btn btn-primary">Add new</a>
                             </div>
                         </div>
@@ -207,7 +203,7 @@
                 ],
                 columnDefs: [{
                     width: '20%',
-                    targets: 1
+                    targets: 4
                 }]
             })
 

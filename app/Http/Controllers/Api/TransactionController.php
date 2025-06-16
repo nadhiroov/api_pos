@@ -6,6 +6,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Web\ProductHistoryWeb;
 
 class TransactionController extends Controller
 {
@@ -55,6 +56,7 @@ class TransactionController extends Controller
             'payment_method' => 'required|string',
             'items' => 'required|array',
         ]);
+
         $data['date'] = now()->format('Y-m-d H:i:s');
         $data['transaction_id'] = "TX-" . now()->format('YmdHis');
         $trx = \App\Models\Transaction::firstOrCreate(
@@ -63,6 +65,12 @@ class TransactionController extends Controller
         );
         $currentTransactions = $trx->transaction ?? [];
         $currentTransactions[] = $data;
+        // stock check
+        $stockResponse = app(ProductHistoryWeb::class)
+            ->checkStock(new Request($data['items']));
+        if ($stockResponse->getStatusCode() !== 200) {
+            return $stockResponse;
+        }
         $trx->update([
             'transaction' => $currentTransactions
         ]);

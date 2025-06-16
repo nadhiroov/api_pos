@@ -104,7 +104,7 @@
                         <button type="submit" class="btn btn-primary">
                             Save changes
                         </button>
-                        <button type="button" class="btn bg-danger-subtle text-danger ms-6">
+                        <button type="button" onclick="history.back();" class="btn bg-danger-subtle text-danger ms-6">
                             Cancel
                         </button>
                     </div>

@@ -40,7 +40,6 @@
                 <div class="d-flex align-items-center justify-content-between mb-4 pb-8">
                     <h4 class="card-title">{{ $title }}</h4>
                     <div class="d-flex">
-                        {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_new">Add new</button> --}}
                         <a href="{{ route('product.addNew') }}"class="btn btn-primary">Add new</a>
                     </div>
                 </div>
@@ -64,34 +63,7 @@
             </div>
         </div>
     </div>
-    {{-- modal add new --}}
-    <div class="modal fade" id="add_new" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
-        style="display: none;">
-        <div class="modal-dialog modal-md">
-            <div class="modal-content">
-                <form action="/merchant" method="POST" class="form-process-add">
-                    <div class="modal-header d-flex align-items-center">
-                        <h4 class="modal-title" id="myModalLabel">
-                            Add new data {{ strtolower($title) }}
-                        </h4>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body modal-body-add">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn bg-danger-subtle text-danger  waves-effect"
-                            data-bs-dismiss="modal">
-                            Close
-                        </button>
-                        <button type="submit" class="btn bg-secondary-subtle text-secondary  waves-effect"
-                            data-bs-dismiss="modal">
-                            Save
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+    
     {{-- modal edit --}}
     <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
         style="display: none;">
@@ -167,16 +139,6 @@
                     width: '20%',
                     targets: 1
                 }]
-            });
-        });
-
-        $('#add_new').on('show.bs.modal', function(e) {
-            $.ajax({
-                type: 'get',
-                url: '/merchant/add',
-                success: function(data) {
-                    $('.modal-body-add').html(data);
-                }
             })
         })
 
@@ -186,7 +148,7 @@
                 type: 'get',
                 url: `/merchant/${id}/edit`,
                 success: function(data) {
-                    $('.modal-body-edit').html(data);
+                    $('.modal-body-edit').html(data)
                 }
             })
         })
