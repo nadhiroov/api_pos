@@ -104,7 +104,6 @@ class MerchantWeb extends Controller
                     $order = $request->order[0];
                     $column = $request->columns[$order['column']]['data'];
 
-                    // Handle ordering for related columns
                     if ($column == 'shop.name') {
                         $query->join('shops', 'branches.shop_id', '=', 'shop.id')
                             ->orderBy('shops.name', $order['dir'])
@@ -121,8 +120,6 @@ class MerchantWeb extends Controller
     function showStaff(Request $request, $branchId) {
         $branch = Branch::findOrFail($branchId);
         $staffIds = $branch->user_id ?? [];
-
-        // 1) Query User + join ke user_role dan roles
         $query = User::whereIn('users.id', $staffIds)
             ->leftJoin('user_role', 'users.id', '=', 'user_role.user_id')
             ->leftJoin('roles',     'user_role.role_id', '=', 'roles.id')
@@ -133,7 +130,6 @@ class MerchantWeb extends Controller
                 'roles.role_name as role_name'
             ]);
 
-        // 2) Kirim ke DataTables
         return DataTables::of($query)
             ->addIndexColumn()
             ->addColumn('name',  fn($u) => $u->name)

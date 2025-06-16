@@ -101,6 +101,16 @@
                         </a>
                     </li>
                 @endif
+                @if (auth()->user()->hasRole(['admin']))
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/userman" id="get-url" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-user-check"></i>
+                            </span>
+                            <span class="hide-menu">User Management</span>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </nav>
 

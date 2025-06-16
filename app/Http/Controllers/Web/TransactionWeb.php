@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Web;
 
 use App\Models\Shop;
-use App\Models\Branch;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;

@@ -33,7 +33,6 @@ class StaffWeb extends Controller
         $shop = Shop::with('branches')->where('user_id', $user->id)->first();
         $branch = Branch::where('id', $branch_id)->first();
         $staffs = User::whereIn('id', $shop->staff_id)->get();
-        // dd($branch->user_id);
         return view('staff.add', [
             'title' => "Add Staff",
             'data' => $staffs,
@@ -47,9 +46,9 @@ class StaffWeb extends Controller
         $user = Auth::user();
         $roles = DB::table('roles')
             ->where('role_name', '!=', 'admin')
+            ->where('role_name', '!=', 'owner')
             ->get();
         $userRole = User::with('fullRoles')->findOrFail($id);
-        // echo $userRole;die;
         return view('staff.edit', [
             'title'   => $this->title,
             'roles'    => $roles,
@@ -86,20 +85,6 @@ class StaffWeb extends Controller
             ->make(true);
     }
 
-    public function editRole(Request $request)
-    {
-        $user = Auth::user();
-        dd($request['branches_id']);
-        $shop = Shop::with('branches')->where('user_id', $user->id)->first();
-        foreach ($shop->branches as $branch) {
-            # code...
-        }
-        $staffIds = $shop->staff_id ?? [];
-        $staffIds[] = $request->id;
-        $shop->update(['staff_id' => $staffIds]);
-        return redirect()->route('staff.index')->with('success', 'Staff added successfully');
-    }
-
     public function store(Request $request)
     {
         $branch = Branch::findOrFail($request->branch_id);
@@ -129,7 +114,6 @@ class StaffWeb extends Controller
 
         $userRole = User::with('fullRoles')->findOrFail($id);
         try {
-            // Sinkronkan role (menghapus role lama, ganti dengan yang baru)
             $userRole->roles()->sync($validated['branches_id']);
 
             return response()->json([
