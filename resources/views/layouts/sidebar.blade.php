@@ -122,7 +122,7 @@
                 </div>
                 <div class="john-title">
                     <h6 class="mb-0 fs-4 fw-semibold">{{ auth()->user()->name }}</h6>
-                    <span class="fs-2">{{ auth()->user()->roles->pluck('role_name')->join(', ') }}</span>
+                    <span class="fs-2">{{ auth()->user()->roles->pluck('role_name')->map(fn($role) => Str::ucfirst($role))->join(', ') }}</span>
                 </div>
                 <a href="/logout" class="border-0 bg-transparent text-primary ms-auto" aria-label="logout"
                     data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout"><i
