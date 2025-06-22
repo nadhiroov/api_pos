@@ -9,6 +9,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
+use function League\Uri\UriTemplate\first;
+
 class ProductHistoryWeb extends Controller
 {
     protected $title;
@@ -17,7 +19,8 @@ class ProductHistoryWeb extends Controller
         $this->title = 'History Product';
     }
 
-    function store(Request $request) {
+    function store(Request $request)
+    {
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'branch_id' => 'required|exists:branches,id',
@@ -38,9 +41,9 @@ class ProductHistoryWeb extends Controller
         $items = collect($request->all());
         $ids   = $items->pluck('product_id')->unique();
         $products = Product::whereIn('id', $ids)
-        ->get()
-        ->keyBy('id');
-        
+            ->get()
+            ->keyBy('id');
+
         foreach ($items as $item) {
             $id  = $item['product_id'];
             $qty = $item['qty'];
@@ -92,6 +95,38 @@ class ProductHistoryWeb extends Controller
             }
         });
 
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Product saved.'
+        ]);
+    }
+
+    public function addHistory(Request $request)
+    {
+        $qty = $request->input('quantity', 0);
+        $history  = ProductHistory::firstOrNew([
+            'product_id' => $request->input('product_id'),
+        ]);
+        $inData  = $history->in ?? [];
+        $foundIdx = null;
+        $today = Carbon::parse($request->input('date', Carbon::now()->format('Y-m-d')))->format('Y-m-d');
+        foreach ($inData as $idx => $record) {
+            if ($record['date'] === $today) {
+                $foundIdx = $idx;
+                break;
+            }
+        }
+        if ($foundIdx !== null) {
+            $inData[$foundIdx]['in'] += $qty;
+        } else {
+            $inData[] = [
+                'date' => $today,
+                'in'   => $qty,
+                'exp'  => $request->input('exp', null),
+            ];
+        }
+        $history->in = $inData;
+        $history->save();
         return response()->json([
             'status'  => 'success',
             'message' => 'Product saved.'

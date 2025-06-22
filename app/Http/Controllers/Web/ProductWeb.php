@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use Exception;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -23,7 +24,7 @@ class ProductWeb extends Controller
     {
         $this->title = 'Product';
     }
-    
+
     public function index()
     {
         return view('product.index', [
@@ -51,7 +52,8 @@ class ProductWeb extends Controller
         ]);
     }
 
-    public function edit($id = '') {
+    public function edit($id = '')
+    {
         $data = Product::with(['branch.shop'])->where('id', $id)->first();
         $user = Auth::user();
         $branches = Branch::with('shop')->whereHas('shop', function ($query) use ($user) {
@@ -78,7 +80,7 @@ class ProductWeb extends Controller
         }
         if ($data->stock == null) {
             $color = 'danger';
-        }else if ($data->stock <= 10) {
+        } else if ($data->stock <= 10) {
             $color = 'danger';
         } elseif ($data->stock <= 20) {
             $color = 'warning';
@@ -90,7 +92,6 @@ class ProductWeb extends Controller
             'data' => $data,
             'stockColor' => $color,
         ]);
-
     }
 
     public function show(Request $request)
@@ -134,7 +135,7 @@ class ProductWeb extends Controller
             ->addColumn('action', function ($product) {
                 return '<div class="d-flex align-items-center gap-2">
                 <a href="' . route('product.detail', $product->id) . '" class="btn bg-info-subtle text-info"><i class="ti ti-zoom-exclamation fs-4 me-2"></i></a>
-                <a href="' . route('product.edit', $product->id) . '" class="btn bg-warning-subtle text-warning"><i class="ti ti-edit fs-4 me-2"></i></a>
+                <a href="' . route('product.edit', $product->id) . '" data-bs-toggle="tooltip" data-bs-placement="top" title="new stock" class="btn bg-success-subtle text-success"><i class="ti ti-stack-push fs-4 me-2"></i></a>
                 <a onclick="confirmDelete(this)" class="btn bg-danger-subtle text-danger" target="product" data-id="' . $product->id . '"><i class="ti ti-trash fs-4 me-2"></i></a>
                     </div>';
             })
@@ -166,7 +167,6 @@ class ProductWeb extends Controller
         ]);
 
         $tempFilename = $validated['image'];
-
         if (Storage::disk('public')->exists("temp/{$tempFilename}")) {
             Storage::disk('public')->move("temp/{$tempFilename}", "products/{$tempFilename}");
         } else {
@@ -195,6 +195,26 @@ class ProductWeb extends Controller
                 $data['branch_id'] = $branchId;
                 $created[]        = Product::create($data);
             }
+            $expInput = $request->input('expired');
+            $exp = null;
+            if (!empty($expInput)) {
+                try {
+                    $exp = Carbon::createFromFormat('d F Y', $expInput)->format('Y-m-d');
+                } catch (\Exception $e) {
+                    $exp = null;
+                }
+            }
+            $initData = [
+                'product_id' => $created[0]->id,
+                'quantity'   => $baseData['stock'] ?? 0,
+                'date'       => now()->format('Y-m-d'),
+                'exp'        => $exp,
+            ];
+            $stockResponse = app(ProductHistoryWeb::class)
+                ->addHistory(new Request($initData));
+            if ($stockResponse->getStatusCode() !== 200) {
+                return $stockResponse;
+            }
             DB::commit();
             return response()->json([
                 'status'   => 'Success',
@@ -209,7 +229,8 @@ class ProductWeb extends Controller
         }
     }
 
-    public function update(int $id, ProductRequest $request) {
+    public function update(int $id, ProductRequest $request)
+    {
         $validated = $request->validated();
         $product   = Product::find($id);
         if (!$product) {

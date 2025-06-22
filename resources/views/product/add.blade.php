@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
     <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet">
 @endsection
 
@@ -76,6 +77,12 @@
                                     placeholder="Input stock value">
                             </div>
                             <div class="mb-4">
+                                <label class="form-label">Expired <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" class="form-control datepicker" name="expired"
+                                    placeholder="mm/dd/yyyy" />
+                            </div>
+                            <div class="mb-4">
                                 <label class="form-label">SKU <span class="text-danger">*</span>
                                 </label>
                                 <input type="text" class="form-control" name="sku" required
@@ -92,38 +99,6 @@
                                 </label>
                                 <input type="number" class="form-control" placeholder="Product Price" name="price">
                             </div>
-                            {{-- <div class="mb-7">
-                                <label class="form-label">Discount Type</label>
-                                <nav>
-                                    <div class="nav nav-tabs justify-content-between align-items-center gap-9"
-                                        id="nav-tab" role="tablist">
-                                        <label for="radio1"
-                                            class="form-check-label form-check p-3  border gap-2 rounded-2 d-flex flex-fill justify-content-center cursor-pointer"
-                                            id="customControlValidation2" id="nav-home-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-home" aria-controls="nav-home">
-                                            <input type="radio" class="form-check-input" name="new-products"
-                                                id="radio1" checked>
-                                            <span class="fs-4 text-dark">No Discount</span>
-                                        </label>
-                                        <label for="radio2"
-                                            class="form-check-label p-3 form-check border gap-2 rounded-2 d-flex flex-fill justify-content-center cursor-pointer"
-                                            id="customControlValidation2" id="nav-profile-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-profile" aria-controls="nav-profile">
-                                            <input type="radio" class="form-check-input" name="new-products"
-                                                id="radio2" disabled readonly>
-                                            <span class="fs-4 text-dark">Percentage %</span>
-                                        </label>
-                                        <label for="radio3"
-                                            class="form-check-label form-check p-3 border gap-2 rounded-2 d-flex flex-fill justify-content-center cursor-pointer"
-                                            id="customControlValidation2" id="nav-contact-tab" data-bs-toggle="tab"
-                                            data-bs-target="#nav-contact" aria-controls="nav-contact">
-                                            <input type="radio" class="form-check-input" name="new-products"
-                                                id="radio3" disabled readonly>
-                                            <span class="fs-4 text-dark">Fixed Price</span>
-                                        </label>
-                                    </div>
-                                </nav>
-                            </div> --}}
                         </div>
                     </div>
                     <div class="form-actions mb-5">
@@ -210,6 +185,7 @@
         <script src="{{ asset('assets/js/plugins/toastr-init.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
         <script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+        <script src="{{ asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
         <script>
             $(document).ready(function() {
                 let quill = new Quill("#editor", {
@@ -228,6 +204,12 @@
                 $(".select2-unit").select2({
                     placeholder: "Select an unit",
                 })
+
+                $(".datepicker").datepicker({
+                    autoclose: true,
+                    todayHighlight: true,
+                    format: "mm M yyyy",
+                });
 
                 $(".form-process-add").on('submit', function(e) {
                     e.preventDefault()

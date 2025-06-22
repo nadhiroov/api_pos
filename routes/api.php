@@ -20,4 +20,4 @@ Route::post('/branches/{branch}/transactions', [TransactionController::class, 'a
 Route::get('/transactions/filter', [TransactionController::class, 'getTransactionsByYearAndBranch'])->middleware('auth:sanctum');
 Route::get('/products', [ProductController::class, 'index'])->middleware('auth:sanctum');
 Route::apiResource('/categories', CategoryController::class)->middleware('auth:sanctum');
-Route::post('/checkStock', [ProductHistoryWeb::class, 'checkStock']);
+Route::post('/addHistory', [ProductHistoryWeb::class, 'addHistory']);
