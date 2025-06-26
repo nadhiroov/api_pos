@@ -67,6 +67,8 @@ Route::middleware(isLogin::class)->group(
             Route::get('{id}/detail', [ProductWeb::class, 'detail'])->name('detail');
             Route::post('/uploadImage', [ProductWeb::class, 'uploadImage'])
                 ->name('uploadImage');
+            Route::get('/{id}/restock', [ProductWeb::class, 'restock']);
+            Route::post('/restock', [ProductWeb::class, 'restockProcess']);
         });
         Route::resource('product', ProductWeb::class);
 

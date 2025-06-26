@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ProductRequest;
 use Exception;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -71,10 +72,16 @@ class ProductWeb extends Controller
         ]);
     }
 
+    function restock(int $id): View
+    {
+        Auth::user();
+        $product = Product::where('id', $id)->first();
+        return view('product.restock', ['data' => $product]);
+    }
+
     public function detail($id = '')
     {
         $data = Product::with(['branch.shop'])->where('id', $id)->first();
-        // dd($data);
         if (!$data) {
             return redirect()->route('product.index')->with('error', 'Product not found');
         }
@@ -135,7 +142,7 @@ class ProductWeb extends Controller
             ->addColumn('action', function ($product) {
                 return '<div class="d-flex align-items-center gap-2">
                 <a href="' . route('product.detail', $product->id) . '" class="btn bg-info-subtle text-info"><i class="ti ti-zoom-exclamation fs-4 me-2"></i></a>
-                <a href="' . route('product.edit', $product->id) . '" data-bs-toggle="tooltip" data-bs-placement="top" title="new stock" class="btn bg-success-subtle text-success"><i class="ti ti-stack-push fs-4 me-2"></i></a>
+                <button data-bs-toggle="modal" data-bs-target="#restock" data-id="' . $product->id . '" data-bs-toggle="tooltip" data-bs-placement="top" title="new stock" class="btn bg-success-subtle text-success"><i class="ti ti-stack-push fs-4 me-2"></i></button>
                 <a onclick="confirmDelete(this)" class="btn bg-danger-subtle text-danger" target="product" data-id="' . $product->id . '"><i class="ti ti-trash fs-4 me-2"></i></a>
                     </div>';
             })
@@ -302,10 +309,7 @@ class ProductWeb extends Controller
             abort(404, 'Image not found');
         }
         $file    = Storage::disk('public')->get($path);
-        // $mime    = Storage::disk('public')->mimeType($path);
-        return response($file, 200)
-            // ->header('Content-Type', $mime)
-            ->header('Content-Disposition', 'inline; filename="' . $filename . '"');
+        return response($file, 200)->header('Content-Disposition', 'inline; filename="' . $filename . '"');
     }
 
     public function destroy(int $id)
@@ -332,5 +336,43 @@ class ProductWeb extends Controller
                 'message' => $er->getMessage()
             ]);
         }
+    }
+
+    public function restockProcess(Request $request) {
+        $data = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity'   => 'required|integer|min:1',
+            'date'       => 'required',
+            'expired'    => 'nullable|string',
+        ]);
+        $product = Product::findOrFail($data['product_id']);
+        if ($product->stock === null) {
+            $product->stock = 0;
+        }
+        $product->stock += $data['quantity'];
+        $product->save();
+        $exp = null;
+        if (!empty($data['expired'])) {
+            try {
+                $exp = Carbon::createFromFormat('d F Y', $data['expired'])->format('Y-m-d');
+            } catch (\Exception $e) {
+                $exp = null;
+            }
+        }
+        $historyData = [
+            'product_id' => $data['product_id'],
+            'quantity'   => $data['quantity'],
+            'date'       => Carbon::parse($data['date'])->format('Y-m-d'),
+            'exp'        => $exp,
+        ];
+        $stockResponse = app(ProductHistoryWeb::class)
+            ->addHistory(new Request($historyData));
+        if ($stockResponse->getStatusCode() !== 200) {
+            return $stockResponse;
+        }
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Product restocked successfully.'
+        ]);
     }
 }

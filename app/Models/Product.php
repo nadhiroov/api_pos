@@ -11,7 +11,7 @@ class Product extends Model
 {
     use HasFactory, SoftDeletes;
     protected $guarded = [];
-    protected $appends = ['image_url']; // Accessor untuk URL gambar
+    protected $appends = ['image_url'];
 
     public function getImageUrlAttribute()
     {

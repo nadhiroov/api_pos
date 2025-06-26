@@ -5,6 +5,7 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css') }}">
 @endsection
 
 @section('content')
@@ -63,16 +64,16 @@
             </div>
         </div>
     </div>
-    
+
     {{-- modal edit --}}
-    <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
-        style="display: none;">
+    <div class="modal fade" id="restock" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
+        style="display: none;" data-loaded="false">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
-                <form action="/category" method="PATCH" class="form-process-edit">
+                <form action="/restock" method="PATCH" class="process-restock">
                     <div class="modal-header d-flex align-items-center">
                         <h4 class="modal-title" id="myModalLabel">
-                            Edit data
+                            Restock product
                         </h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
@@ -99,6 +100,7 @@
     <script src="{{ asset('assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/toastr-init.js') }}"></script>
     <script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('#datatable').DataTable({
@@ -142,22 +144,44 @@
             })
         })
 
-        $('#edit').on('show.bs.modal', function(e) {
-            let id = $(e.relatedTarget).data('id')
-            $.ajax({
-                type: 'get',
-                url: `/merchant/${id}/edit`,
-                success: function(data) {
-                    $('.modal-body-edit').html(data)
-                }
-            })
+        $('#restock').on('show.bs.modal', function(e) {
+            let modal = $(this);
+            let isLoaded = modal.data('loaded')
+
+            if (!isLoaded) {
+                let id = $(e.relatedTarget).data('id');
+                $.ajax({
+                    type: 'get',
+                    url: `/product/${id}/restock`,
+                    success: function(data) {
+                        modal.find('.modal-body-edit').html(data)
+                        $(".datepicker").datepicker({
+                            autoclose: true,
+                            todayHighlight: true,
+                            format: "mm M yyyy",
+                            todayBtn: "linked",
+                            container: '#restock'
+                        })
+                        $(".datepicker2").datepicker({
+                            autoclose: true,
+                            todayHighlight: true,
+                            format: "mm M yyyy",
+                        })
+                        modal.data('loaded', true)
+                    }
+                })
+            }
         })
 
-        $(".form-process-add").on('submit', function(e) {
+        $('#restock').on('hidden.bs.modal', function() {
+            $(this).data('loaded', false)
+        })
+
+        $(".process-restock").on('submit', function(e) {
             e.preventDefault()
-            let formData = new FormData(this);
+            let formData = new FormData(this)
             $.ajax({
-                url: '/merchant',
+                url: '/product/restock',
                 type: "post",
                 data: formData,
                 processData: false,
@@ -165,45 +189,19 @@
                 dataType: "json",
                 cache: false,
                 async: false,
-                success: function(response = "") {
-                    if (response.status == 'Success') {
-                        toastr.success(response.message, response.status);
-                    } else {
-                        toastr.error(response.message, response.status);
-                    }
-                    $('#datatable').DataTable().ajax.reload(null, false);
-                },
-                error: function(response) {
-                    toastr.error(response.message, response.status);
-                },
-            })
-        })
-
-        $(".form-process-edit").on('submit', function(e) {
-            e.preventDefault()
-            let formData = new FormData(this);
-            $.ajax({
-                url: `/merchant/${formData.get('id')}`,
-                type: "POST",
-                data: formData,
                 headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                processData: false,
-                contentType: false,
-                dataType: "json",
-                cache: false,
-                async: false,
                 success: function(response = "") {
-                    if (response.status == 'Success') {
-                        toastr.success(response.message, response.status);
+                    if (response.status == 'success') {
+                        toastr.success(response.message, response.status)
                     } else {
-                        toastr.error(response.message, response.status);
+                        toastr.error(response.message, response.status)
                     }
-                    $('#datatable').DataTable().ajax.reload(null, false);
+                    $('#datatable').DataTable().ajax.reload(null, false)
                 },
                 error: function(response) {
-                    toastr.error(response.message, response.status);
+                    toastr.error(response.message, response.status)
                 },
             })
         })
