@@ -83,12 +83,30 @@
                 @endif
                 @if (auth()->user()->hasRole(['warehouse', 'admin', 'owner']))
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/report" id="get-url" aria-expanded="false">
-                            <span>
+                        <a class="sidebar-link has-arrow" href="javascript:void(0)" aria-expanded="false">
+                            <span class="d-flex">
                                 <i class="ti ti-chart-area-line"></i>
                             </span>
                             <span class="hide-menu">Report</span>
                         </a>
+                        <ul aria-expanded="false" class="collapse first-level">
+                            <li class="sidebar-item">
+                                <a href="/report/sales" class="sidebar-link">
+                                    <div class="round-16 d-flex align-items-center justify-content-center">
+                                        <i class="ti ti-circle"></i>
+                                    </div>
+                                    <span class="hide-menu">Sales</span>
+                                </a>
+                            </li>
+                            <li class="sidebar-item">
+                                <a href="/report/stock" class="sidebar-link">
+                                    <div class="round-16 d-flex align-items-center justify-content-center">
+                                        <i class="ti ti-circle"></i>
+                                    </div>
+                                    <span class="hide-menu">Stock</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                 @endif
                 @if (auth()->user()->hasRole(['admin', 'owner']))
@@ -122,7 +140,8 @@
                 </div>
                 <div class="john-title">
                     <h6 class="mb-0 fs-4 fw-semibold">{{ auth()->user()->name }}</h6>
-                    <span class="fs-2">{{ auth()->user()->roles->pluck('role_name')->map(fn($role) => Str::ucfirst($role))->join(', ') }}</span>
+                    <span
+                        class="fs-2">{{ auth()->user()->roles->pluck('role_name')->map(fn($role) => Str::ucfirst($role))->join(', ') }}</span>
                 </div>
                 <a href="/logout" class="border-0 bg-transparent text-primary ms-auto" aria-label="logout"
                     data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="logout"><i

@@ -370,9 +370,5 @@ class ProductWeb extends Controller
         if ($stockResponse->getStatusCode() !== 200) {
             return $stockResponse;
         }
-        return response()->json([
-            'status'  => 'success',
-            'message' => 'Product restocked successfully.'
-        ]);
     }
 }

@@ -11,6 +11,7 @@ use App\Http\Controllers\Web\CategoryWeb;
 use App\Http\Controllers\Web\MerchantWeb;
 use App\Http\Controllers\Web\ProductHistoryWeb;
 use App\Http\Controllers\Web\Report;
+use App\Http\Controllers\Web\ReportSales;
 use App\Http\Controllers\Web\TransactionWeb;
 use App\Http\Controllers\Web\UserManagementWeb;
 
@@ -82,21 +83,21 @@ Route::middleware(isLogin::class)->group(
 
         // transaction
         Route::prefix('transaction')->name('transaction.')->group(function () {
-            Route::get('/data', [TransactionWeb::class, 'show']);
             Route::get('/detail', [TransactionWeb::class, 'detail']);
         });
         Route::resource('transaction', TransactionWeb::class);
         
         // report
-        Route::prefix('report')->name('report.')->group(function () {});
-        Route::resource('report', Report::class);
+        Route::prefix('report')->name('report.')->group(function () {
+            Route::get('/sales', [ReportSales::class, 'index']);
+            Route::get('/sales/data', [ReportSales::class, 'show']);
+        });
         
         // product history
         Route::post('/checkStock', [ProductHistoryWeb::class, 'checkStock']);
 
         // User management
         Route::prefix('userman')->name('userman.')->group(function () {
-            Route::get('/data', [UserManagementWeb::class, 'show']);
             Route::get('/{id}/edit', [UserManagementWeb::class, 'edit']);
         });
         Route::resource('userman', UserManagementWeb::class);

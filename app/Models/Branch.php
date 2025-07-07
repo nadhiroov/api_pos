@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Branch extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $fillable = ['shop_id', 'name', 'address', 'phone', 'user_id'];
+    protected $fillable = ['shop_id', 'name', 'address', 'phone', 'user_id', 'logo'];
     protected $casts = [
         'user_id' => 'array',
     ];
