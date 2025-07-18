@@ -55,10 +55,14 @@ class TransactionController extends Controller
             'total' => 'required|numeric',
             'payment_method' => 'required|string',
             'items' => 'required|array',
+            'cust_id' => 'nullable',
         ]);
 
         $data['date'] = now()->format('Y-m-d H:i:s');
         $data['transaction_id'] = "TX-" . now()->format('YmdHis');
+        if ($data['cust_id'] == null) {
+            unset($data['cust_id']);
+        }
         $trx = \App\Models\Transaction::firstOrCreate(
             ['branch_id' => $branchId, 'year' => $year],
             ['transaction' => []]
@@ -71,15 +75,36 @@ class TransactionController extends Controller
         if ($stockResponse->getStatusCode() !== 200) {
             return $stockResponse;
         }
+
         $trx->update([
             'transaction' => $currentTransactions
         ]);
+        if (isset($data['cust_id'])) {
+            $customerTransaction = \App\Models\StudentTransaction::firstOrCreate(
+                ['student_id' => $data['cust_id']],
+                ['transaction' => []]
+            );
+            unset($data['cust_id']);
+            foreach ($data['items'] as $item) {
+                $items[] = [
+                    'product_id' => intval($item['product_id']),
+                    'qty' => intval($item['qty']),
+                    'price' => $item['price'],
+                ];
+            }
+            $data['items'] = $items;
+            $data['branch_id'] = intval($branchId);
+            $currentCustTransactions = $customerTransaction->transaction ?? [];
+            $currentCustTransactions[] = $data;
+            $customerTransaction->update([
+                'transaction' => $currentCustTransactions
+            ]);
+        }
         return response()->json([
             'message' => 'Transaction added successfully',
             'data' => $data
         ]);
     }
-
 
     /**
      * Display the specified resource.
