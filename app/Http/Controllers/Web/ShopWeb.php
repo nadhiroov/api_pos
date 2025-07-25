@@ -27,6 +27,14 @@ class ShopWeb extends Controller
         ]);
     }
 
+    public function edit(int $id) 
+    {
+        Auth::user();
+        $shop = Shop::where('id', $id)->first();
+        dd($shop);
+        return view('shop.edit', ['data' => $shop]);    
+    }
+
     public function store(Request $request) {
         $validated = $request->validate([
             'name' => 'required|string|max:255',

@@ -10,7 +10,7 @@ use App\Http\Controllers\Web\ProductWeb;
 use App\Http\Controllers\Web\CategoryWeb;
 use App\Http\Controllers\Web\MerchantWeb;
 use App\Http\Controllers\Web\ProductHistoryWeb;
-use App\Http\Controllers\Web\Report;
+use App\Http\Controllers\Web\ProfileWeb;
 use App\Http\Controllers\Web\ReportSales;
 use App\Http\Controllers\Web\TransactionWeb;
 use App\Http\Controllers\Web\UserManagementWeb;
@@ -35,6 +35,13 @@ Route::middleware(isLogin::class)->group(
     function () {
         Route::get('/', [Dashboard::class, 'dashboard']);
         Route::get('/dashboard', [Dashboard::class, 'dashboard']);
+
+        Route::prefix('profile')->name('profile.')->group(function () {
+            Route::post('/', [ProfileWeb::class, 'update']);
+            Route::get('/pageChangePic', [ProfileWeb::class, 'pageChangePic']);
+            Route::post('/changeImg', [ProfileWeb::class, 'changeImg'])->name('changeImg');
+        });
+        Route::resource('profile', ProfileWeb::class)->except(['update', 'store']);
 
         // shop
         Route::prefix('shop')->name('shop.')->group(function () {
@@ -86,13 +93,13 @@ Route::middleware(isLogin::class)->group(
             Route::get('/detail', [TransactionWeb::class, 'detail']);
         });
         Route::resource('transaction', TransactionWeb::class);
-        
+
         // report
         Route::prefix('report')->name('report.')->group(function () {
             Route::get('/sales', [ReportSales::class, 'index']);
             Route::get('/sales/data', [ReportSales::class, 'show']);
         });
-        
+
         // product history
         Route::post('/checkStock', [ProductHistoryWeb::class, 'checkStock']);
 

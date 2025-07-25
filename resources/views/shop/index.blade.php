@@ -85,8 +85,9 @@
                     <p class="mb-3 px-xl-5">{{ $data->address }}</p>
                     <div class="d-flex align-items-center justify-content-center gap-3">
                         @if (auth()->user()->id == $data->user_id)
-                            {{-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add_new">Add new</button> --}}
-                            <button class="btn btn-warning">Edit</button>
+                            <input type="hidden" class="shop_id" value="{{ $data->id }}">
+                            <button class="btn btn-warning btn-edit-shop" data-bs-toggle="modal"
+                                data-bs-target="#edit_shop">Edit</button>
                         @endif
                     </div>
                 </div>
@@ -94,14 +95,14 @@
         @endif
     </div>
 
-    {{-- modal add new --}}
+    {{-- new shop --}}
     <div class="modal fade" id="add_new" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
         style="display: none;">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <div class="modal-header d-flex align-items-center">
                     <h4 class="modal-title" id="myModalLabel">
-                        Add new data
+                        Create new shop
                     </h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
@@ -153,7 +154,7 @@
             </div>
         </div>
     </div>
-    {{-- modal add new --}}
+    {{-- join shop --}}
     <div class="modal fade" id="join" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
         style="display: none;">
         <div class="modal-dialog modal-md">
@@ -187,6 +188,32 @@
             </div>
         </div>
     </div>
+    {{-- edit shop --}}
+    <div class="modal fade" id="edit_shop" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
+        style="display: none;">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <div class="modal-header d-flex align-items-center">
+                    <h4 class="modal-title" id="myModalLabel">
+                        Edit shop
+                    </h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body-edit">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn bg-danger-subtle text-danger  waves-effect"
+                        data-bs-dismiss="modal">
+                        Close
+                    </button>
+                    <button type="submit" class="btn bg-secondary-subtle text-secondary  waves-effect">
+                        Save
+                    </button>
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection
 
 
@@ -195,9 +222,8 @@
     <script src="{{ asset('assets/js/plugins/toastr-init.js') }}"></script>
     <script>
         Dropzone.autoDiscover = false;
-
         const myDropzone = new Dropzone("#my-dropzone", {
-            url: "/product/uploadImage",
+            url: "/shop/uploadImage",
             paramName: "file",
             autoProcessQueue: true,
             maxFiles: 1,
@@ -210,7 +236,7 @@
                     document.getElementById("imageInput").value = "";
                 });
             }
-        });
+        })
     </script>
 
     <script>
@@ -267,6 +293,47 @@
                 error: function(response) {
                     toastr.error(response.message, response.status)
                 },
+            })
+        })
+
+        $(".edit_shop").on('show.bs.modal', function(e) {
+            let data = $(".shop_id").val()
+            alert(data)
+            $.ajax({
+                type: 'get',
+                url: `/shop/${data}/edit`,
+                data: {
+                    id: data
+                },
+                beforeSend: function() {
+                    $('.modal-body-edit').html(
+                        `<div class="text-center">
+                            <div class="spinner-grow" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>`
+                    )
+                },
+                success: function(data) {
+                    $('.modal-body-edit').removeClass('text-center')
+                    $('.modal-body-edit').html(data)
+                    const myDropzone = new Dropzone("#my-dropzone2", {
+                        url: "/product/uploadImage",
+                        paramName: "file",
+                        autoProcessQueue: true,
+                        maxFiles: 1,
+                        addRemoveLinks: true,
+                        init: function() {
+                            this.on("success", function(file, response) {
+                                document.getElementById("shopImage").value =
+                                    response.filename;
+                            });
+                            this.on("removedfile", function(file) {
+                                document.getElementById("shopImage").value = "";
+                            });
+                        }
+                    })
+                }
             })
         })
     </script>
