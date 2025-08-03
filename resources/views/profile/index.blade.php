@@ -82,7 +82,7 @@
                                                 alt="modernize-img" class="img-fluid rounded-circle" width="120"
                                                 height="120">
                                             <div class="d-flex align-items-center justify-content-center my-4 gap-6">
-                                                <button class="btn btn-primary" data-bs-toggle="modal"
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                                     data-bs-target="#changePic">Change</button>
                                             </div>
                                             <p class="mb-0">Select an image</p>
@@ -95,23 +95,21 @@
                                     <div class="card-body p-4">
                                         <h4 class="card-title">Change Password</h4>
                                         <p class="card-subtitle mb-4">To change your password please confirm here</p>
-                                        <form>
-                                            <div class="mb-3">
-                                                <label for="exampleInputPassword1" class="form-label">Current
-                                                    Password</label>
-                                                <input name="current_password" type="password" class="form-control">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="exampleInputPassword2" class="form-label">New Password</label>
-                                                <input name="new_password" type="password"
-                                                    class="form-control @error('new_password') is-invalid @enderror">
-                                            </div>
-                                            <div>
-                                                <label for="exampleInputPassword3" class="form-label">Confirm
-                                                    Password</label>
-                                                <input name="confirm_password" type="password" class="form-control">
-                                            </div>
-                                        </form>
+                                        <div class="mb-3">
+                                            <label for="exampleInputPassword1" class="form-label">Current
+                                                Password</label>
+                                            <input name="current_password" type="password" class="form-control">
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="exampleInputPassword2" class="form-label">New Password</label>
+                                            <input name="new_password" type="password"
+                                                class="form-control @error('new_password') is-invalid @enderror">
+                                        </div>
+                                        <div>
+                                            <label for="exampleInputPassword3" class="form-label">Confirm
+                                                Password</label>
+                                            <input name="confirm_password" type="password" class="form-control">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -218,8 +216,8 @@
                                                     <i class="ti ti-device-mobile text-dark d-block fs-7" width="26"
                                                         height="26"></i>
                                                     <div>
-                                                        <h5 class="fs-4 fw-semibold mb-0">iPhone 14</h5>
-                                                        <p class="mb-0"> {{ $session->time_ago }}</p>
+                                                        <h5 class="fs-4 fw-semibold mb-0">{{ $session->ip_address }}</h5>
+                                                        <p class="mb-0">{{ $session->time_ago }}</p>
                                                     </div>
                                                 </div>
                                                 <a class="text-dark fs-6 d-flex align-items-center justify-content-center bg-transparent p-2 fs-4 rounded-circle"
@@ -263,7 +261,7 @@
         style="display: none;">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <form class="form-process-change">
+                <form class="form-process-changeImg">
                     <div class="modal-header d-flex align-items-center">
                         <h4 class="modal-title" id="myModalLabel">
                             Change picture
@@ -291,7 +289,7 @@
 @section('script')
     <script src="{{ asset('assets/js/plugins/toastr-init.js') }}"></script>
     <script>
-        $(document).ready(function() {})
+        // $(document).ready(function() {})
         $('#changePic').on('show.bs.modal', function(e) {
             $.ajax({
                 type: 'get',
@@ -310,7 +308,7 @@
             })
         })
 
-        $(".form-process-change").on('submit', function(e) {
+        $(".form-process-changeImg").on('submit', function(e) {
             e.preventDefault()
             let formData = new FormData(this);
             $.ajax({

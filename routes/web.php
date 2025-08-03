@@ -98,6 +98,8 @@ Route::middleware(isLogin::class)->group(
         Route::prefix('report')->name('report.')->group(function () {
             Route::get('/sales', [ReportSales::class, 'index']);
             Route::get('/sales/data', [ReportSales::class, 'show']);
+            Route::get('{id}/{date}/detail', [ReportSales::class, 'detail'])->name('sales.detail');
+            Route::get('{id}/{date}/chart', [ReportSales::class, 'chart'])->name('sales.chart');
         });
 
         // product history

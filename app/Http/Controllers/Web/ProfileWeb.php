@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileWeb extends Controller
 {
@@ -19,7 +20,7 @@ class ProfileWeb extends Controller
 
     public function index()
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $activeSessions = DB::table('sessions')
             ->where('user_id', $user->id)
             ->orderByDesc('last_activity')
@@ -43,7 +44,7 @@ class ProfileWeb extends Controller
 
     public function pageChangePic()
     {
-        $user = auth()->user();
+        $user = Auth::user();
         return view('profile.changePic', [
             'title' => $this->title,
             'user' => $user,
@@ -52,7 +53,7 @@ class ProfileWeb extends Controller
 
     public function changeImg(Request $request)
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $userData = User::where('id', $user->id)->first();
         $avatar = $request->input('avatar');
         $userData->image = "user-$avatar.jpg";
@@ -65,7 +66,7 @@ class ProfileWeb extends Controller
 
     public function update(Request $request)
     {
-        $user = auth()->user();
+        $user = Auth::user();
         $userData = User::where('id', $user->id)->first();
         if ($request->input('current_password') != '') {
             if (!Hash::check($request->input('current_password'), $userData->password)) {

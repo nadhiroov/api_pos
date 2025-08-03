@@ -141,7 +141,7 @@
                             <a class="nav-link pe-0" href="javascript:void(0)" id="drop1" aria-expanded="false">
                                 <div class="d-flex align-items-center">
                                     <div class="user-profile-img">
-                                        <img src="{{ asset('assets/images/profile/user-1.jpg') }}"
+                                        <img src="{{ asset('assets/images/profile') . '/' . auth()->user()->image }}"
                                             class="rounded-circle" width="35" height="35" alt="modernize-img" />
                                     </div>
                                 </div>
@@ -153,7 +153,7 @@
                                         <h5 class="mb-0 fs-5 fw-semibold">User Profile</h5>
                                     </div>
                                     <div class="d-flex align-items-center py-9 mx-7 border-bottom">
-                                        <img src="{{ asset('assets/images/profile/user-1.jpg') }}"
+                                        <img src="{{ asset('assets/images/profile') . '/' . auth()->user()->image }}"
                                             class="rounded-circle" width="80" height="80" alt="modernize-img" />
                                         <div class="ms-3">
                                             <h5 class="mb-1 fs-3">{{ auth()->user()->name }}</h5>

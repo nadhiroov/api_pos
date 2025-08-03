@@ -1,13 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Web\ReportSales;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ShopController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProductController;
+use App\Http\Controllers\Web\ProductHistoryWeb;
 use App\Http\Controllers\Api\CategoryController;
 use App\Http\Controllers\Api\TransactionController;
-use App\Http\Controllers\Web\ProductHistoryWeb;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -21,3 +22,4 @@ Route::get('/transactions/filter', [TransactionController::class, 'getTransactio
 Route::get('/products', [ProductController::class, 'index'])->middleware('auth:sanctum');
 Route::apiResource('/categories', CategoryController::class)->middleware('auth:sanctum');
 Route::post('/addHistory', [ProductHistoryWeb::class, 'addHistory']);
+Route::get('report/sales/data', [ReportSales::class, 'show']);
