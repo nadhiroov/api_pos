@@ -117,11 +117,11 @@ class ProductHistoryWeb extends Controller
             }
         }
         if ($foundIdx !== null) {
-            $inData[$foundIdx]['in'] += $qty;
+            $inData[$foundIdx]['in'] += intval($qty);
         } else {
             $inData[] = [
                 'date' => $today,
-                'in'   => $qty,
+                'in'   => intval($qty),
                 'exp'  => $request->input('exp', null),
             ];
         }

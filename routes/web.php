@@ -12,6 +12,7 @@ use App\Http\Controllers\Web\MerchantWeb;
 use App\Http\Controllers\Web\ProductHistoryWeb;
 use App\Http\Controllers\Web\ProfileWeb;
 use App\Http\Controllers\Web\ReportSales;
+use App\Http\Controllers\Web\ReportStock;
 use App\Http\Controllers\Web\TransactionWeb;
 use App\Http\Controllers\Web\UserManagementWeb;
 
@@ -100,6 +101,9 @@ Route::middleware(isLogin::class)->group(
             Route::get('/sales/data', [ReportSales::class, 'show']);
             Route::get('{id}/{date}/detail', [ReportSales::class, 'detail'])->name('sales.detail');
             Route::get('{id}/{date}/chart', [ReportSales::class, 'chart'])->name('sales.chart');
+
+            Route::get('/stock', [ReportStock::class, 'index']);
+            Route::get('/stock/data', [ReportStock::class, 'show']);
         });
 
         // product history

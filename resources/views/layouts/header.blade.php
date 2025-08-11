@@ -137,6 +137,14 @@
                         <!-- ------------------------------- -->
                         <!-- start profile Dropdown -->
                         <!-- ------------------------------- -->
+                        <li class="nav-item nav-icon-hover-bg rounded-circle">
+                            <a class="nav-link moon dark-layout" href="javascript:void(0)">
+                                <i class="ti ti-moon moon"></i>
+                            </a>
+                            <a class="nav-link sun light-layout" href="javascript:void(0)">
+                                <i class="ti ti-sun sun"></i>
+                            </a>
+                        </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link pe-0" href="javascript:void(0)" id="drop1" aria-expanded="false">
                                 <div class="d-flex align-items-center">
@@ -164,8 +172,7 @@
                                         </div>
                                     </div>
                                     <div class="message-body">
-                                        <a href="/profile"
-                                            class="py-8 px-7 mt-8 d-flex align-items-center">
+                                        <a href="/profile" class="py-8 px-7 mt-8 d-flex align-items-center">
                                             <span
                                                 class="d-flex align-items-center justify-content-center text-bg-light rounded-1 p-6">
                                                 <img src="{{ asset('assets/images/svgs/icon-account.svg') }}"
