@@ -52,6 +52,11 @@
             <div class="card">
                 <div class="card-body">
                     <h4 class="card-title">Line Chart</h4>
+                    <div class="col-md-4">
+                        <label for="date_range" class="form-label">Date range</label>
+                        <input id="date_range" type="text" class="form-control daterange"
+                            placeholder="Select date range" />
+                    </div>
                     <div id="chart-line-zoomable" class="mx-n3"></div>
                 </div>
             </div>
@@ -65,13 +70,7 @@
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
         $(document).ready(function() {
-            /* $('.daterange').daterangepicker({
-                autoUpdateInput: false,
-                locale: {
-                    cancelLabel: 'Clear'
-                }
-            });
-
+            /* 
             $('.daterange').on('apply.daterangepicker', function(ev, picker) {
                 $(this).val(picker.startDate.format('YYYY-MM-DD') + ' - ' + picker.endDate.format(
                     'YYYY-MM-DD'));
@@ -81,7 +80,15 @@
                 $(this).val('');
             }); */
 
-            loadChartData();
+            loadChartData()
+            let dateRangePick = $('.daterange').daterangepicker({
+                autoUpdateInput: false,
+                startDate: moment().startOf('hour'),
+                endDate: moment().startOf('hour').add(32, 'hour'),
+                locale: {
+                    cancelLabel: 'Clear'
+                }
+            })
         });
         let options_zoomable = {
             series: [{
@@ -133,17 +140,19 @@
             },
             tooltip: {
                 shared: false,
-                x: {
+                /* x: {
                     formatter: val => (val / 1e6).toFixed(0)
-                },
+                }, */
                 theme: 'dark'
             }
         }
         var chart = new ApexCharts(document.querySelector('#chart-line-zoomable'), options_zoomable);
         chart.render();
+
         function loadChartData() {
-            let dateRange = $('.daterange').val() ?? '{{ $date }}';
-            let id = '{{ $product->id }}';
+            let dateRange = $('.daterange').val() == '' ? '{{ $date }}' : $('.daterange').val();
+            let id = '{{ $product->id }}'
+            alert($('.daterange').val())
 
             $.ajax({
                 url: `/report/${id}/${dateRange}/chart`,
@@ -165,6 +174,6 @@
         }
 
         $('.select2-branch').on('change', loadChartData);
-        $('.daterange').on('apply.daterangepicker', loadChartData);
+        $('.daterange').on('apply.daterangepicker', loadChartData)
     </script>
 @endsection

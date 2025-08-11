@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Yajra\DataTables\Facades\DataTables;
 
 class TransactionWeb extends Controller
@@ -102,15 +103,20 @@ class TransactionWeb extends Controller
             ->map(function ($item) use ($products) {
                 $product = $products->firstWhere('id', $item['product_id']);
                 return [
-                    'name' => $product->name ?? 'Unknown Product',
-                    'qty'  => $item['qty'],
-                    'price' => $item['price'],
-                    'image' => $product->image ?? null,
+                    'name'   => $product->name ?? 'Unknown Product',
+                    'qty'    => $item['qty'],
+                    'price'  => $item['price'],
+                    'image'  => $product->image ?? null,
+                    'cust_id'=> $item['cust_id'] ?? null,
                 ];
             });
+            if (!$detailTrx->has('cust_id') && $detailTrx->get('cust_id') != null && $detailTrx->get('cust_id') != '-') {
+                $studentName = Http::get(env('API_TSES') . '/student/getName/' . $detailTrx->get('cust_id'));
+                $detailTrx['cust_id'] = $studentName->json()['data']['NAMA_LENGKAP'] ?? 'Unknown Customer';
+            }
         return view('transaction.detail', [
             'title'       => $this->title,
-            'transaction' => $transaction,
+            // 'transaction' => $transaction,
             'detailTrx'  => $detailTrx,
             'cashier'     => $cashier,
             'date'        => Carbon::parse($detailTrx['date'])->format('d F Y  H:i'),

@@ -137,7 +137,6 @@ class ReportSales extends Controller
     public function chart($id, $date)
     {
         $product = Product::with('branch', 'category')
-            // ->where('id', decrypt($id))
             ->where('id', $id)
             ->firstOrFail();
         $transactions = Transaction::query()
