@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Category extends Model
 {
     use HasFactory;
-    protected $fillable = ['shop_id', 'name'];
+    protected $fillable = ['shop_id', 'name', 'branch_id'];
 
     public function shop() : BelongsTo {
         return $this->belongsTo(Shop::class);
@@ -18,5 +18,9 @@ class Category extends Model
 
     public function products() : HasMany {
         return $this->hasMany(Product::class);
+    }
+
+    public function branch() : BelongsTo {
+        return $this->belongsTo(Branch::class);
     }
 }

@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Role;
 use App\Models\Transaction;
+use App\Models\UserRole;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -33,10 +34,23 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Role::create([
+            'role_name' => 'owner'
+        ]);
+
+        Role::create([
             'role_name' => 'cashier'
         ]);
 
-        // 👥 Buat users tambahan
+        Role::create([
+            'role_name' => 'warehouse'
+        ]);
+
+        UserRole::create([
+            'user_id' => 1,
+            'role_id' => 1,
+        ]);
+
+        /* // 👥 Buat users tambahan
         $users = User::factory(20)->create();
 
         // 🏬 Buat shops milik admin dan user
@@ -49,10 +63,10 @@ class DatabaseSeeder extends Seeder
         $branches = Branch::factory(100)->recycle($shops)->create();
 
         // 📦 Buat produk milik category & branch
-        Product::factory(300)->recycle([$categories, $branches])->create();
+        Product::factory(300)->recycle([$categories, $branches])->create(); */
 
         // 💵 Buat transaksi: hanya 1 record per branch per tahun
-        foreach ($branches as $branch) {
+        /* foreach ($branches as $branch) {
             $transactions = [];
 
             for ($i = 0; $i < 20; $i++) {
@@ -85,8 +99,6 @@ class DatabaseSeeder extends Seeder
                 ['branch_id' => $branch->id, 'year' => $year],
                 ['transaction' => $transactions]
             );
-        }
-
-
+        } */
     }
 }

@@ -78,7 +78,8 @@ class AuthController extends Controller
                     "role"      => $data["dataUser"]["role"],
                     "shop"      => $data["dataUser"]["shop"] ?? '-',
                     "branches"  => $data["dataUser"]["branches"] ?? [],
-                    "token"     => $token->plainTextToken
+                    "token"     => $token->plainTextToken,
+                    "image"     => $data["dataUser"]["image"] ?? [],
                 ]
             ], 200);
         } else {

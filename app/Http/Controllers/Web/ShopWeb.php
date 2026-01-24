@@ -31,7 +31,6 @@ class ShopWeb extends Controller
     {
         Auth::user();
         $shop = Shop::where('id', $id)->first();
-        dd($shop);
         return view('shop.edit', ['data' => $shop]);    
     }
 

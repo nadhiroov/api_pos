@@ -6,6 +6,7 @@ use App\Models\Shop;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Branch;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -43,6 +44,9 @@ class CategoryWeb extends Controller
             })
             ->addColumn('name', function ($category) {
                 return $category->name;
+            })
+            ->addColumn('branch_name', function ($category) {
+                return $category->branch->name ?? 'All Branches';
             })
             ->filter(function ($query) use ($request) {
                 // Handle search
@@ -93,26 +97,37 @@ class CategoryWeb extends Controller
 
     public function add()
     {
-        return view('category.add');
+        $user = Auth::user();
+        $branches = Branch::query()
+            ->whereHas('shop', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->get();
+        return view('category.add', ['branches' => $branches]);
     }
 
     function edit(int $id)
     {
-        Auth::user();
+        $user = Auth::user();
         $category = Category::where('id', $id)->first();
-        return view('category.edit', ['data' => $category]);
+        $branches = Branch::query()
+            ->whereHas('shop', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->get();
+        return view('category.edit', ['data' => $category, 'branches' => $branches]);
     }
 
     public function store(Request $request)
     {
         $user = Auth::user();
         $data = $request->validate([
-            'name' => ['required']
+            'name' => ['required'],
+            'branch_id' => ['nullable']
         ]);
         $shop = Shop::where('user_id', $user->id)->first();
         $saveData = [
             'name' => $data['name'],
-            'shop_id'  => $shop->id
+            'shop_id'  => $shop->id,
+            'branch_id' => $data['branch_id'] == 'All Branches' ? null : $data['branch_id']
         ];
         $category = new Category($saveData);
         $category->save();
@@ -126,10 +141,12 @@ class CategoryWeb extends Controller
     {
         Auth::user();
         $data = $request->validate([
-            'name' => ['required']
+            'name' => ['required'],
+            'branch_id' => ['nullable']
         ]);
         $saveData = [
-            'name' => $data['name']
+            'name' => $data['name'],
+            'branch_id' => $data['branch_id'] == 'All Branches' ? null : $data['branch_id']
         ];
         $product = new Category($saveData);
         $product->where('id', $id)->update($saveData);

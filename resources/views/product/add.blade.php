@@ -180,7 +180,6 @@
     @section('script')
         <script src="{{ asset('assets/libs/dropzone/dist/min/dropzone.min.js') }}"></script>
         <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
-        <script src="{{ asset('assets/libs/select2/dist/js/select2.min.js') }}"></script>
         <script src="{{ asset('assets/js/forms/select2.init.js') }}"></script>
         <script src="{{ asset('assets/js/plugins/toastr-init.js') }}"></script>
         <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script>
@@ -208,7 +207,7 @@
                 $(".datepicker").datepicker({
                     autoclose: true,
                     todayHighlight: true,
-                    format: "mm M yyyy",
+                    format: "dd M yyyy",
                 });
 
                 $(".form-process-add").on('submit', function(e) {

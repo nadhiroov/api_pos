@@ -5,9 +5,11 @@
 @section('css')
     <link rel="stylesheet" href="{{ asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/libs/select2/dist/css/select2.min.css') }}" />˝
 @endsection
 
 @section('content')
+
     <head>
         <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
@@ -48,6 +50,7 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
+                                <th>Branch</th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -61,7 +64,7 @@
     {{-- modal add new --}}
     <div class="modal fade" id="add_new" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
         style="display: none;">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <form action="/category" method="POST" class="form-process-add">
                     <div class="modal-header d-flex align-items-center">
@@ -89,7 +92,7 @@
     {{-- modal edit --}}
     <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
         style="display: none;">
-        <div class="modal-dialog modal-sm">
+        <div class="modal-dialog modal-md">
             <div class="modal-content">
                 <form action="/category" method="PATCH" class="form-process-edit">
                     <div class="modal-header d-flex align-items-center">
@@ -121,6 +124,7 @@
     <script src="{{ asset('assets/libs/datatables.net/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('assets/js/plugins/toastr-init.js') }}"></script>
     <script src="{{ asset('assets/libs/sweetalert2/dist/sweetalert2.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/select2/dist/js/select2.full.min.js') }}"></script>
     <script>
         $(document).ready(function() {
             $('#datatable').DataTable({
@@ -135,6 +139,10 @@
                         name: 'name'
                     },
                     {
+                        data: 'branch_name',
+                        name: 'branch_name'
+                    },
+                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
@@ -143,7 +151,7 @@
                 ],
                 columnDefs: [{
                     width: '20%',
-                    targets: 1
+                    targets: 2
                 }]
             })
         })
@@ -154,6 +162,9 @@
                 url: '/category/add',
                 success: function(data) {
                     $('.category-body-add').html(data);
+                    $('.select2').select2({
+                        dropdownParent: $('#add_new')
+                    });
                 }
             })
         })
@@ -164,7 +175,10 @@
                 type: 'get',
                 url: `/category/${id}/edit`,
                 success: function(data) {
-                    $('.category-body-edit').html(data);
+                    $('.category-body-edit').html(data)
+                    $('.select2').select2({
+                        dropdownParent: $('#edit')
+                    });
                 }
             })
         })

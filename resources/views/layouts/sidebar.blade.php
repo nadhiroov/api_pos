@@ -41,16 +41,6 @@
                         <span class="hide-menu">Shop Management</span>
                     </a>
                 </li>
-                @if (auth()->user()->hasRole(['warehouse', 'admin', 'owner']))
-                    <li class="sidebar-item">
-                        <a class="sidebar-link" href="/category" id="get-url" aria-expanded="false">
-                            <span>
-                                <i class="ti ti-category"></i>
-                            </span>
-                            <span class="hide-menu">Category</span>
-                        </a>
-                    </li>
-                @endif
                 @if (auth()->user()->hasRole(['admin', 'owner']))
                     <li class="sidebar-item">
                         <a class="sidebar-link" href="/merchant" id="get-url" aria-expanded="false">
@@ -58,6 +48,16 @@
                                 <i class="ti ti-building-store"></i>
                             </span>
                             <span class="hide-menu">Merchant</span>
+                        </a>
+                    </li>
+                @endif
+                @if (auth()->user()->hasRole(['warehouse', 'admin', 'owner']))
+                    <li class="sidebar-item">
+                        <a class="sidebar-link" href="/category" id="get-url" aria-expanded="false">
+                            <span>
+                                <i class="ti ti-category"></i>
+                            </span>
+                            <span class="hide-menu">Category</span>
                         </a>
                     </li>
                 @endif
