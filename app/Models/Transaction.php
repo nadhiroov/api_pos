@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Transaction extends Model
 {
     use HasFactory;
-    protected $fillable = ['branch_id', 'year', 'transaction'];
+    protected $fillable = ['branch_id', 'year', 'transaction', 'user_id'];
     protected function casts(): array
     {
         return [

@@ -26,7 +26,7 @@
                 <!-- Dashboard -->
                 <!-- ---------------------------------- -->
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="/dashboard" id="get-url" aria-expanded="false">
+                    <a class="sidebar-link" href="/dashboard" aria-expanded="false">
                         <span>
                             <i class="ti ti-home"></i>
                         </span>
@@ -34,7 +34,7 @@
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a class="sidebar-link" href="/shop" id="get-url" aria-expanded="false">
+                    <a class="sidebar-link" href="/shop" aria-expanded="false">
                         <span>
                             <i class="ti ti-settings"></i>
                         </span>
@@ -43,7 +43,7 @@
                 </li>
                 @if (auth()->user()->hasRole(['admin', 'owner']))
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/merchant" id="get-url" aria-expanded="false">
+                        <a class="sidebar-link" href="/merchant" aria-expanded="false">
                             <span>
                                 <i class="ti ti-building-store"></i>
                             </span>
@@ -53,7 +53,7 @@
                 @endif
                 @if (auth()->user()->hasRole(['warehouse', 'admin', 'owner']))
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/category" id="get-url" aria-expanded="false">
+                        <a class="sidebar-link {{ Request::is('category*') ? 'active' : '' }}" href="/category" aria-expanded="false">
                             <span>
                                 <i class="ti ti-category"></i>
                             </span>
@@ -63,7 +63,7 @@
                 @endif
                 @if (auth()->user()->hasRole(['warehouse', 'admin', 'owner']))
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/product" id="get-url" aria-expanded="false">
+                        <a class="sidebar-link {{ Request::is('product*') ? 'active' : '' }}" href="/product" aria-expanded="false">
                             <span>
                                 <i class="ti ti-package"></i>
                             </span>
@@ -73,7 +73,7 @@
                 @endif
                 @if (auth()->user()->hasRole(['warehouse', 'admin', 'owner']))
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/transaction" id="get-url" aria-expanded="false">
+                        <a class="sidebar-link" href="/transaction" aria-expanded="false">
                             <span>
                                 <i class="ti ti-shopping-cart"></i>
                             </span>
@@ -120,7 +120,7 @@
                 @endif
                 @if (auth()->user()->hasRole(['admin', 'owner']))
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/staff" id="get-url" aria-expanded="false">
+                        <a class="sidebar-link" href="/staff" aria-expanded="false">
                             <span>
                                 <i class="ti ti-users"></i>
                             </span>
@@ -130,7 +130,7 @@
                 @endif
                 @if (auth()->user()->hasRole(['admin']))
                     <li class="sidebar-item">
-                        <a class="sidebar-link" href="/userman" id="get-url" aria-expanded="false">
+                        <a class="sidebar-link" href="/userman" aria-expanded="false">
                             <span>
                                 <i class="ti ti-user-check"></i>
                             </span>

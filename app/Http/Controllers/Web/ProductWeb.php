@@ -38,12 +38,15 @@ class ProductWeb extends Controller
         if ($id != '') {
             $branch = Branch::where('id', $id)->first();
         }
-        $user = Auth::user();
-        $branches = Branch::with('shop')->whereHas('shop', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
-        })->get();
-        $categories = Category::with('shop')->whereHas('shop', function ($query) use ($user) {
-            $query->where('user_id', $user->id);
+        $branches = Branch::with('shop')
+            ->get();
+        if (!auth()->user()->hasRole(['admin'])) {
+            $branches->whereHas('shop', function ($query) {
+                $query->where('user_id', session('shop')->id);
+            });
+        }
+        $categories = Category::with('shop')->whereHas('shop', function ($query) {
+            $query->where('user_id', session('shop')->id);
         })->get();
         return view('product.add', [
             'title' => 'Add Product',
@@ -103,15 +106,26 @@ class ProductWeb extends Controller
 
     public function show(Request $request)
     {
-        $user = Auth::user();
-        $products = Product::with(['branch.shop']) // Eager loading relasi nested
-            ->select(['products.*']); // Select semua kolom dari products
-        if ($request['branch_id'] != null) {
-            $products->where('branch_id', $request['branch_id']);
-        } else {
-            $products->whereHas('branch.shop', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            });
+        $user   = auth()->user();
+        $shopId = session('shop')?->id;
+
+        $products = Product::with(['branch.shop']);
+        if (!$user->hasRole('admin')) {
+
+            if ($request->branch_id) {
+                $products->where('branch_id', $request->branch_id)
+                    ->whereHas(
+                        'branch',
+                        fn($q) =>
+                        $q->where('shop_id', $shopId)
+                    );
+            } else {
+                $products->whereHas(
+                    'branch',
+                    fn($q) =>
+                    $q->where('shop_id', $shopId)
+                );
+            }
         }
 
         return DataTables::of($products)
@@ -338,7 +352,8 @@ class ProductWeb extends Controller
         }
     }
 
-    public function restockProcess(Request $request) {
+    public function restockProcess(Request $request)
+    {
         $data = $request->validate([
             'product_id' => 'required|exists:products,id',
             'quantity'   => 'required|integer|min:1',

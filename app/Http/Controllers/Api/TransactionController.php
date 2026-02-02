@@ -64,7 +64,7 @@ class TransactionController extends Controller
             unset($data['cust_id']);
         }
         $trx = \App\Models\Transaction::firstOrCreate(
-            ['branch_id' => $branchId, 'year' => $year],
+            ['branch_id' => $branchId, 'year' => $year, 'user_id' => $data['cashier_id']],
             ['transaction' => []]
         );
         $currentTransactions = $trx->transaction ?? [];

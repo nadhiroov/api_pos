@@ -24,8 +24,13 @@ class TransactionWeb extends Controller
 
     public function index()
     {
-        $user = Auth::user();
-        $shop = Shop::with('branches')->where('user_id', $user->id)->orWhereJsonContains('staff_id', $user->id)->first();
+        // $user = Auth::user();
+        $shop = Shop::with('branches')->first();
+        /* if ($user->hasRole(['admin'])) {
+        }else{
+            $shop = Shop::with('branches')->where('user_id', $user->id)->orWhereJsonContains('staff_id', $user->id)->first();
+        } */
+
         return view('transaction.index', [
             'datas' => $shop,
             'title' => $this->title,
@@ -37,7 +42,12 @@ class TransactionWeb extends Controller
         $branchId = $request->input('branch_id', null);
         $date_range = $request->input('date_range', null);
         $dt = explode(' - ', $date_range);
-        $record = Transaction::where('branch_id', $branchId);
+        $user = Auth::user();
+        if ($user->role_id == 1) {
+            $record = Transaction::get();
+        } else {
+            $record = Transaction::where('branch_id', $branchId);
+        }
         if ($date_range != null) {
             $record = $record->whereBetween('year', [Carbon::parse($dt[0])->format('Y'), Carbon::parse($dt[1])->format('Y')]);
         } else {
@@ -107,13 +117,13 @@ class TransactionWeb extends Controller
                     'qty'    => $item['qty'],
                     'price'  => $item['price'],
                     'image'  => $product->image ?? null,
-                    'cust_id'=> $item['cust_id'] ?? null,
+                    'cust_id' => $item['cust_id'] ?? null,
                 ];
             });
-            if (!$detailTrx->has('cust_id') && $detailTrx->get('cust_id') != null && $detailTrx->get('cust_id') != '-') {
-                $studentName = Http::get(env('API_TSES') . '/student/getName/' . $detailTrx->get('cust_id'));
-                $detailTrx['cust_id'] = $studentName->json()['data']['NAMA_LENGKAP'] ?? 'Unknown Customer';
-            }
+        if (!$detailTrx->has('cust_id') && $detailTrx->get('cust_id') != null && $detailTrx->get('cust_id') != '-') {
+            $studentName = Http::get(env('API_TSES') . '/student/getName/' . $detailTrx->get('cust_id'));
+            $detailTrx['cust_id'] = $studentName->json()['data']['NAMA_LENGKAP'] ?? 'Unknown Customer';
+        }
         return view('transaction.detail', [
             'title'       => $this->title,
             // 'transaction' => $transaction,

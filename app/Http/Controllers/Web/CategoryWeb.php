@@ -19,19 +19,24 @@ class CategoryWeb extends Controller
     }
     public function index()
     {
+        // dd(session('shop')->id);
         return view('category.index', [
-            'title' => $this->title,
+            'title' => $this->title
         ]);
     }
 
     public function show(Request $request)
     {
-        $user = Auth::user();
-        $categories = Category::query()
-            ->whereHas('shop', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
-            ->with('shop');
+        $categories = Category::query()->with(['shop', 'branch']);
+
+        if (!auth()->user()->hasRole('admin') && session('shop')?->id) {
+            $categories->whereHas(
+                'shop',
+                fn($q) =>
+                $q->where('id', session('shop')->id)
+            );
+        }
+
 
         return DataTables::of($categories)
             // ->addIndexColumn()
@@ -97,33 +102,31 @@ class CategoryWeb extends Controller
 
     public function add()
     {
-        $user = Auth::user();
         $branches = Branch::query()
-            ->whereHas('shop', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
+            ->whereHas('shop', function ($query) {
+                $query->where('user_id', session('shop')->id);
             })->get();
         return view('category.add', ['branches' => $branches]);
     }
 
     function edit(int $id)
     {
-        $user = Auth::user();
         $category = Category::where('id', $id)->first();
         $branches = Branch::query()
-            ->whereHas('shop', function ($query) use ($user) {
-                $query->where('user_id', $user->id);
+            ->whereHas('shop', function ($query) {
+                $query->where('user_id', session('shop')->id);
             })->get();
         return view('category.edit', ['data' => $category, 'branches' => $branches]);
     }
 
     public function store(Request $request)
     {
-        $user = Auth::user();
+        // Auth::user();
         $data = $request->validate([
             'name' => ['required'],
             'branch_id' => ['nullable']
         ]);
-        $shop = Shop::where('user_id', $user->id)->first();
+        $shop = Shop::where('user_id', session('shop')->id)->first();
         $saveData = [
             'name' => $data['name'],
             'shop_id'  => $shop->id,
@@ -139,7 +142,7 @@ class CategoryWeb extends Controller
 
     public function update(int $id, Request $request)
     {
-        Auth::user();
+        // Auth::user();
         $data = $request->validate([
             'name' => ['required'],
             'branch_id' => ['nullable']
@@ -158,7 +161,7 @@ class CategoryWeb extends Controller
 
     public function destroy(int $id)
     {
-        Auth::user();
+        // Auth::user();
         $category = Category::where('id', $id)->first();
         if (!$category) {
             return response()->json([

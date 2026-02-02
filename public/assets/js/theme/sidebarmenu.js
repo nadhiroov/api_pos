@@ -5,7 +5,7 @@ if ((at = "vertical")) {
   // Active 2 file at same time 
   // ----------------------------------------
 
-  var currentNewURL =
+  /* var currentNewURL =
     window.location != window.parent.location
       ? document.referrer
       : document.location.href;
@@ -17,7 +17,7 @@ if ((at = "vertical")) {
     current_link.setAttribute("href", "./index.html");
   } else {
     current_link.setAttribute("href", "./");
-  }
+  } */
   // end
 
 

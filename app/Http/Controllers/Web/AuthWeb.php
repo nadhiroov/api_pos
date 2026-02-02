@@ -29,7 +29,8 @@ class AuthWeb extends Controller
         $loginResult = $this->authService->login($data);
 
         if ($loginResult['status']) {
-            Auth::login($loginResult['dataUser']);
+            // Auth::login($loginResult['dataUser']);
+            session(['shop' => $loginResult['dataUser']['shop']]);
             $request->session()->regenerate();
             return redirect()->intended('/dashboard');
         }
