@@ -36,7 +36,7 @@ class AuthService
                 ->select('id', 'name', 'shop_id')
                 ->get();
             $shop_id = $shopIds->select('id', 'name', 'code')->first();
-        } elseif ($rolesCollect->contains("cashier")) {
+        } elseif ($rolesCollect->contains("cashier") || $rolesCollect->contains("warehouse")) {
             $branches = Branch::whereJsonContains('user_id', $dataUser->id)->select('id','name', 'shop_id')->get();
             $shop_id = Shop::whereJsonContains('staff_id', $dataUser->id)->select('id', 'name', 'code')->first();
         }

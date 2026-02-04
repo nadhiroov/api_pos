@@ -19,7 +19,8 @@ class CategoryWeb extends Controller
     }
     public function index()
     {
-        // dd(session('shop')->id);
+        // dd(auth()->user()->id);
+        // dd(auth()->user()->hasRole('warehouse'));
         return view('category.index', [
             'title' => $this->title
         ]);
@@ -102,20 +103,28 @@ class CategoryWeb extends Controller
 
     public function add()
     {
-        $branches = Branch::query()
-            ->whereHas('shop', function ($query) {
-                $query->where('user_id', session('shop')->id);
-            })->get();
+        if (auth()->user()->hasRole('admin')) {
+            $branches = Branch::all();
+        } else {
+            $branches = Branch::query()
+                ->whereHas('shop', function ($query) {
+                    $query->where('id', session('shop')->id);
+                })->get();
+        }
         return view('category.add', ['branches' => $branches]);
     }
 
     function edit(int $id)
     {
         $category = Category::where('id', $id)->first();
-        $branches = Branch::query()
-            ->whereHas('shop', function ($query) {
-                $query->where('user_id', session('shop')->id);
-            })->get();
+        if (auth()->user()->hasRole('admin')) {
+            $branches = Branch::all();
+        } else {
+            $branches = Branch::query()
+                ->whereHas('shop', function ($query) {
+                    $query->where('id', session('shop')->id);
+                })->get();
+        }
         return view('category.edit', ['data' => $category, 'branches' => $branches]);
     }
 
@@ -126,7 +135,7 @@ class CategoryWeb extends Controller
             'name' => ['required'],
             'branch_id' => ['nullable']
         ]);
-        $shop = Shop::where('user_id', session('shop')->id)->first();
+        $shop = Shop::where('id', session('shop')->id)->first();
         $saveData = [
             'name' => $data['name'],
             'shop_id'  => $shop->id,

@@ -158,14 +158,14 @@
                         $(".datepicker").datepicker({
                             autoclose: true,
                             todayHighlight: true,
-                            format: "mm M yyyy",
+                            format: "dd M yyyy",
                             todayBtn: "linked",
                             container: '#restock'
                         })
                         $(".datepicker2").datepicker({
                             autoclose: true,
                             todayHighlight: true,
-                            format: "mm M yyyy",
+                            format: "d M yyyy",
                         })
                         modal.data('loaded', true)
                     }

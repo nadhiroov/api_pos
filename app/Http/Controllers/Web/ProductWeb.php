@@ -38,16 +38,17 @@ class ProductWeb extends Controller
         if ($id != '') {
             $branch = Branch::where('id', $id)->first();
         }
-        $branches = Branch::with('shop')
-            ->get();
-        if (!auth()->user()->hasRole(['admin'])) {
-            $branches->whereHas('shop', function ($query) {
-                $query->where('user_id', session('shop')->id);
-            });
+        if (auth()->user()->hasRole(['admin'])) {
+            $branches = Branch::get();
+            $categories = Category::get();
+        } else {
+            $branches = Branch::query()->whereHas('shop', function ($query) {
+                $query->where('id', session('shop')->id);
+            })->get();
+            $categories = Category::with('shop')->whereHas('shop', function ($query) {
+                $query->where('id', session('shop')->id);
+            })->get();
         }
-        $categories = Category::with('shop')->whereHas('shop', function ($query) {
-            $query->where('user_id', session('shop')->id);
-        })->get();
         return view('product.add', [
             'title' => 'Add Product',
             'branches' => $branches,
@@ -385,5 +386,9 @@ class ProductWeb extends Controller
         if ($stockResponse->getStatusCode() !== 200) {
             return $stockResponse;
         }
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Stock updated.'
+        ], 200);
     }
 }
