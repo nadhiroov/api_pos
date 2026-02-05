@@ -77,7 +77,7 @@
                                     placeholder="Input stock value">
                             </div>
                             <div class="mb-4">
-                                <label class="form-label">Expired <span class="text-danger">*</span>
+                                <label class="form-label">Expired
                                 </label>
                                 <input type="text" class="form-control datepicker" name="expired"
                                     placeholder="mm/dd/yyyy" />

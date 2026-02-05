@@ -34,9 +34,6 @@ class ReportSales extends Controller
     public function show(Request $request)
     {
         $branchId = $request->input('branch_id');
-        if (! $branchId) {
-            return DataTables::of(collect())->make(true);
-        }
 
         if ($request->filled('date_range')) {
             [$start, $end] = explode(' - ', $request->date_range);
@@ -46,9 +43,17 @@ class ReportSales extends Controller
             $from = Carbon::today()->startOfDay();
             $to   = Carbon::today()->endOfDay();
         }
-        $transactions = Transaction::with('branch')
-            ->where('branch_id', $branchId)
-            ->get();
+        if ($branchId != null) {
+            $transactions = Transaction::with('branch')
+                ->where('branch_id', $branchId)
+                ->get();
+        } else {
+            $transactions = Transaction::with('branch.shop')
+                ->whereHas('branch', function ($q) {
+                    $q->where('shop_id', session('shop')->id);
+                })
+                ->get();
+        }
 
         $rows = collect();
         foreach ($transactions as $tx) {

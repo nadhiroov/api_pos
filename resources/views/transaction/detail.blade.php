@@ -35,7 +35,7 @@
         </div>
         <div class="d-flex align-items-center justify-content-between mt-3">
             <h5 class="mb-0 fw-">Customer</h5>
-            <h5 class="mb-0 fw-">{{ $detailTrx['cust_id'] ?? '-' }}</h5>
+            <h5 class="mb-0 fw-">{{ Str::words($detailTrx['cust_id'] ?? '-', 3, '...') }}</h5>
         </div>
         <div class="d-flex align-items-center justify-content-between mt-3">
             <h5 class="mb-0 fw-">Total</h5>

@@ -21,6 +21,10 @@ class Branch extends Model
         return $this->belongsTo(Shop::class);
     }
 
+    function transaction(): HasMany {
+        return $this->hasMany(Transaction::class);
+    }
+
     function products(): HasMany {
         return $this->hasMany(Product::class);
     }

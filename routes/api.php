@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\ProductController;
 use App\Http\Controllers\Web\ProductHistoryWeb;
 use App\Http\Controllers\Api\CategoryController;
+use App\Http\Controllers\Api\CustomerController;
 use App\Http\Controllers\Api\TransactionController;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -23,3 +24,4 @@ Route::get('/products', [ProductController::class, 'index'])->middleware('auth:s
 Route::apiResource('/categories', CategoryController::class)->middleware('auth:sanctum');
 Route::post('/addHistory', [ProductHistoryWeb::class, 'addHistory']);
 Route::get('report/sales/data', [ReportSales::class, 'show']);
+Route::get('getStudents', [CustomerController::class, 'getStudent']);

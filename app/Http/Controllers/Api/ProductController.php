@@ -2,28 +2,51 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Resources\ProductCollection;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
+use App\Http\Resources\ProductCollection;
 
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    /* public function index(Request $request)
     {
         Auth::user();
         $page = $request->input('page', 1);
         $size = $request->input('size', 10);
 
         $branch_id = $request->input('branch_id');
-        $product = Product::query()->with('category', 'branch')->where('branch_id', $branch_id);
+        $product = Cache::remember('products-branch-'.$branch_id, 300, function () use ($branch_id) {
+            return Product::query()->with('category', 'branch')->where('branch_id', $branch_id);
+        });
         $products = $product->paginate(perPage: $size, page: $page);
         return new ProductCollection($products);
+    } */
+
+    public function index(Request $request)
+    {
+        $page = $request->input('page', 1);
+        $size = $request->input('size', 10);
+        $branch_id = $request->input('branch_id');
+
+        $cacheKey = "products-branch-{$branch_id}";
+
+        $products = Cache::remember($cacheKey, 300, function () use ($branch_id) {
+            return Product::with('category', 'branch')
+                ->where('branch_id', $branch_id)
+                ->get();
+        });
+
+        $paginated = $products->forPage($page, $size);
+
+        return new ProductCollection($paginated);
     }
+
 
     /**
      * Show the form for creating a new resource.

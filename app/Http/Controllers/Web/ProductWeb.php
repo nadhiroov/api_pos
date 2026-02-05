@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Web;
 
+use Exception;
 use App\Models\Branch;
 use App\Models\Product;
 use App\Models\Category;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductRequest;
-use Exception;
-use Illuminate\Contracts\View\View;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\View\View;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\ProductRequest;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -209,6 +210,7 @@ class ProductWeb extends Controller
             'barcode'
         ]);
         $baseData['image'] = $request['image'];
+        $baseData['name'] = Str::title($baseData['name']);
         $created = [];
         DB::beginTransaction();
         try {
@@ -216,6 +218,7 @@ class ProductWeb extends Controller
                 $data             = $baseData;
                 $data['branch_id'] = $branchId;
                 $created[]        = Product::create($data);
+                Cache::forget('products-branch-' . $branchId);
             }
             $expInput = $request->input('expired');
             $exp = null;
@@ -286,6 +289,7 @@ class ProductWeb extends Controller
         DB::beginTransaction();
         try {
             $product->update($baseData);
+            Cache::forget('products-branch-' . $product->branch_id);
             DB::commit();
             return response()->json([
                 'status'  => 'Success',

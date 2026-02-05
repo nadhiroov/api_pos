@@ -3,12 +3,13 @@
 namespace App\Http\Controllers\Web;
 
 use App\Models\Shop;
+use App\Models\User;
+use App\Models\Product;
 use App\Models\Transaction;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use App\Http\Controllers\Controller;
-use App\Models\Product;
-use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Http;
 use Yajra\DataTables\Facades\DataTables;
@@ -45,6 +46,10 @@ class TransactionWeb extends Controller
         $user = Auth::user();
         if ($user->role_id == 1) {
             $record = Transaction::get();
+        } elseif ($branchId == null) {
+            $record = Transaction::whereHas('branch.shop', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            });
         } else {
             $record = Transaction::where('branch_id', $branchId);
         }
@@ -53,6 +58,7 @@ class TransactionWeb extends Controller
         } else {
             $record = $record->where('year', now()->year);
         }
+        // $record = $record->get();
         $record = $record->first();
 
         if (! $record || empty($record->transaction)) {
@@ -78,6 +84,7 @@ class TransactionWeb extends Controller
         $rows = collect($list)->map(function ($trx, $index) use ($record) {
             return [
                 'id'             => $record->id,
+                'branch'         => $record->branch->name ?? '-',
                 'index'          => $index,
                 'transaction_id' => $trx['transaction_id'] ?? '',
                 'date'           => $trx['date']           ?? '',
@@ -117,16 +124,14 @@ class TransactionWeb extends Controller
                     'qty'    => $item['qty'],
                     'price'  => $item['price'],
                     'image'  => $product->image ?? null,
-                    'cust_id' => $item['cust_id'] ?? null,
                 ];
             });
-        if (!$detailTrx->has('cust_id') && $detailTrx->get('cust_id') != null && $detailTrx->get('cust_id') != '-') {
+        if ($detailTrx->has('cust_id') && $detailTrx->get('cust_id') != null && $detailTrx->get('cust_id') != '-') {
             $studentName = Http::get(env('API_TSES') . '/student/getName/' . $detailTrx->get('cust_id'));
-            $detailTrx['cust_id'] = $studentName->json()['data']['NAMA_LENGKAP'] ?? 'Unknown Customer';
+            $detailTrx['cust_id'] =  Str::title($studentName->json()['data']['NAMA_LENGKAP'] ?? 'Unknown Customer');
         }
         return view('transaction.detail', [
             'title'       => $this->title,
-            // 'transaction' => $transaction,
             'detailTrx'  => $detailTrx,
             'cashier'     => $cashier,
             'date'        => Carbon::parse($detailTrx['date'])->format('d F Y  H:i'),

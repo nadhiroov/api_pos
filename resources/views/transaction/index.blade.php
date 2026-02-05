@@ -127,6 +127,7 @@
                     format: 'YYYY-MM-DD'
                 }
             })
+            table.ajax.reload()
         })
 
         const table = $('#datatable').DataTable({
@@ -153,7 +154,10 @@
                 },
                 {
                     data: 'transaction_id',
-                    name: 'transaction_id'
+                    name: 'transaction_id',
+                    render: function(data, type, row) {
+                        return `${data} <br> <small class="text-muted">${row.branch}</small>`;
+                    }
                 },
                 {
                     data: 'total_product',
@@ -202,6 +206,7 @@
 
         $('#btn-reset').on('click', function() {
             $('.daterange').val('')
+            $('.select2-branch').val(null).trigger('change')
             table.clear().draw()
         })
 

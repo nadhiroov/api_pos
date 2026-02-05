@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Builder;
 class CategoryController extends Controller
 {
     function index(Request $request) {
-        Auth::user();
         $page = $request->input('page', 1);
         $size = $request->input('size', 10);
         if (!isset($request['shop_id']) || $request['shop_id'] == null) {
@@ -22,6 +21,9 @@ class CategoryController extends Controller
             ], 400);
         }
         $categories = Category::query()->select('id','name')->where('shop_id', $request['shop_id']);
+        if ($request['brach_id'] != null) {
+            $categories = $categories->where('branch_id', $request['brach_id']);
+        }
         $categories = $categories->where(function (Builder $builder) use ($request) {
             $name = $request->input('name');
             if ($name) {
