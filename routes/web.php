@@ -8,6 +8,7 @@ use App\Http\Controllers\Web\StaffWeb;
 use App\Http\Controllers\Web\Dashboard;
 use App\Http\Controllers\Web\ProductWeb;
 use App\Http\Controllers\Web\CategoryWeb;
+use App\Http\Controllers\Web\EcommerceController;
 use App\Http\Controllers\Web\MerchantWeb;
 use App\Http\Controllers\Web\ProductHistoryWeb;
 use App\Http\Controllers\Web\ProfileWeb;
@@ -15,7 +16,10 @@ use App\Http\Controllers\Web\ReportSales;
 use App\Http\Controllers\Web\ReportStock;
 use App\Http\Controllers\Web\TransactionWeb;
 use App\Http\Controllers\Web\UserManagementWeb;
+use Illuminate\Support\Facades\Cache;
 
+Route::get('/', [EcommerceController::class, 'index']);
+Route::get('getCategoryByMerchant',[EcommerceController::class, 'getCategory'])->name('getCategoryByMerchant');
 // auth
 Route::get('/login', [AuthWeb::class, 'loginPage']);
 Route::get('/register', function () {
@@ -32,9 +36,14 @@ Route::get('/logout', [AuthWeb::class, 'logout']);
 Route::get('/product/image/{filename}', [ProductWeb::class, 'showImage'])
     ->name('product.image');
 
+// delete all cache
+Route::get('/clear-cache', function () {
+    Cache::flush();
+    return 'Cache cleared';
+});
+
 Route::middleware(isLogin::class)->group(
     function () {
-        Route::get('/', [Dashboard::class, 'dashboard']);
         Route::get('/dashboard', [Dashboard::class, 'dashboard']);
 
         Route::prefix('profile')->name('profile.')->group(function () {

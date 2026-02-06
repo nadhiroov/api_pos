@@ -19,8 +19,6 @@ class CategoryWeb extends Controller
     }
     public function index()
     {
-        // dd(auth()->user()->id);
-        // dd(auth()->user()->hasRole('warehouse'));
         return view('category.index', [
             'title' => $this->title
         ]);
