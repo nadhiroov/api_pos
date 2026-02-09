@@ -11,6 +11,7 @@
         "laravel/nightwatch": "^1.7",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.10.1",
+        "livewire/livewire": "^4.1",
         "yajra/laravel-datatables-oracle": "^12.1"
     },
     "require-dev": {

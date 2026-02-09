@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('templates.app')
 
 @section('title', 'Home Page')
 
@@ -66,7 +66,8 @@
                             <img src="../assets/images/svgs/icon-dd-invoice.svg" width="50" height="50"
                                 class="mb-3" alt="modernize-img" />
                             <p class="fw-semibold fs-3 text-success mb-1">Income</p>
-                            <h5 class="fw-semibold text-success mb-0"> Rp. {{ number_format($countIncome, 0, ',', '.') }} </h5>
+                            <h5 class="fw-semibold text-success mb-0"> Rp. {{ number_format($countIncome, 0, ',', '.') }}
+                            </h5>
                         </div>
                     </div>
                 </div>

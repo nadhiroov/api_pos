@@ -18,6 +18,7 @@ use App\Http\Requests\ProductRequest;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Yajra\DataTables\Facades\DataTables;
+use App\Helpers\Imgproxy;
 
 class ProductWeb extends Controller
 {
@@ -307,7 +308,7 @@ class ProductWeb extends Controller
     public function uploadImage(Request $request)
     {
         $validated = $request->validate([
-            'file' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'file' => 'required|image|mimes:jpeg,png,jpg|max:5120',
         ]);
 
         $file = $request->file('file');

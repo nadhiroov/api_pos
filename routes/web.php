@@ -17,6 +17,8 @@ use App\Http\Controllers\Web\ReportStock;
 use App\Http\Controllers\Web\TransactionWeb;
 use App\Http\Controllers\Web\UserManagementWeb;
 use Illuminate\Support\Facades\Cache;
+ 
+Route::livewire('/ecommerce', 'ecommerce');
 
 Route::get('/', [EcommerceController::class, 'index']);
 Route::get('getCategoryByMerchant',[EcommerceController::class, 'getCategory'])->name('getCategoryByMerchant');

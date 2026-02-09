@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('templates.app')
 
 @section('title', 'Product Detail')
 
@@ -84,9 +84,11 @@
                                     {{ $data->updated_at->format('d M Y H:i') }}
                                 </div>
                                 <div class="d-sm-flex align-items-center gap-6 pt-8 mb-7">
-                                    <button class="btn d-block btn-info px-5 py-8"  onclick="history.back();" >Back</button>
-                                    <a href="{{ route('product.edit', $data->id) }}" class="btn d-block btn-warning px-5 py-8">Edit</i></a>
-                                    <a onclick="confirmDeletes(this)" class="btn d-block btn-danger px-7 py-8" target="product" data-id="{{ $data->id }}">Delete</a>
+                                    <button class="btn d-block btn-info px-5 py-8" onclick="history.back();">Back</button>
+                                    <a href="{{ route('product.edit', $data->id) }}"
+                                        class="btn d-block btn-warning px-5 py-8">Edit</i></a>
+                                    <a onclick="confirmDeletes(this)" class="btn d-block btn-danger px-7 py-8"
+                                        target="product" data-id="{{ $data->id }}">Delete</a>
                                 </div>
                             </div>
                         </div>

@@ -1,5 +1,4 @@
-@extends('layouts.app')
-
+@extends('templates.app')
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('assets/libs/datatables.net-bs5/css/dataTables.bootstrap5.min.css') }}" />
@@ -228,6 +227,7 @@
                         cache: false,
                         async: false,
                         success: function(response = "") {
+                            console.log(response);
                             if (response.status == 'Success') {
                                 toastr.success(response.message, response.status)
                             } else {
@@ -278,6 +278,9 @@
                     });
                     this.on("removedfile", function(file) {
                         document.getElementById("imageInput").value = "";
+                    });
+                    this.on("error", function(file, response) {
+                        console.log(response);
                     });
                 }
             });

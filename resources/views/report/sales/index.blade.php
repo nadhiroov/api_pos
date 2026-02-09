@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('templates.app')
 
 @section('title', 'Home Page')
 
@@ -117,8 +117,7 @@
                     d.date_range = $('.daterange').val()
                 },
             },
-            columns: [
-                {
+            columns: [{
                     data: 'image',
                     name: 'image'
                 },

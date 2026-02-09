@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('templates.app')
 
 @section('title', 'Home Page')
 
@@ -130,8 +130,7 @@
                     url: '/merchant/data',
                     type: 'GET'
                 },
-                columns: [
-                    {
+                columns: [{
                         data: 'name',
                         name: 'name'
                     },

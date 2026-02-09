@@ -494,64 +494,33 @@
                 for (let i = 0; i < products.length; i++) {
                     let product = products[i];
                     let listProduct = `
-                                 <div class="col-sm-4 col-xxl-3">
-                                        <div class="card hover-img overflow-hidden">
-                                            <div class="position-relative">
-                                                <a href="../main/eco-shop-detail.html">
-                                                    <img src="${product.image_url}" class="card-img-top"
-                                                        alt="modernize-img">
-                                                </a>
-                                                <a href="javascript:void(0)"
-                                                    class="text-bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    data-bs-title="Add To Cart">
-                                                    <i class="ti ti-basket fs-4"></i>
-                                                </a>
-                                            </div>
-                                            <div class="card-body pt-3 p-4">
-                                                <h6 class="fs-4">${product.name}</h6>
-                                                <div class="d-flex align-items-center justify-content-between">
-                                                    <h6 class="fs-4 mb-0"> ${product.price}
-                                                    </h6>
-                                                    <ul class="list-unstyled d-flex align-items-center mb-0">
-                                                        <li>
-                                                            <a class="me-1" href="javascript:void(0)">
-                                                                <i class="ti ti-star text-warning"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="me-1" href="javascript:void(0)">
-                                                                <i class="ti ti-star text-warning"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="me-1" href="javascript:void(0)">
-                                                                <i class="ti ti-star text-warning"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a class="me-1" href="javascript:void(0)">
-                                                                <i class="ti ti-star text-warning"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li>
-                                                            <a href="javascript:void(0)">
-                                                                <i class="ti ti-star text-warning"></i>
-                                                            </a>
-                                                        </li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                            `;
+                        <div class="col-sm-4 col-xxl-3">
+                        <div class="card hover-img overflow-hidden">
+                            <div class="position-relative">
+                                <a href="../main/eco-shop-detail.html">
+                                    <img src="${product.image_url}" class="card-img-top"
+                                        alt="modernize-img">
+                                </a>
+                                <a href="javascript:void(0)"
+                                    class="text-bg-primary rounded-circle p-2 text-white d-inline-flex position-absolute bottom-0 end-0 mb-n3 me-3"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    data-bs-title="Add To Cart">
+                                    <i class="ti ti-basket fs-4"></i>
+                                </a>
+                            </div>
+                            <div class="card-body pt-3 p-4">
+                                <h6 class="fs-4">${product.name}</h6>
+                                <div class="d-flex align-items-center justify-content-between">
+                                    <h6 class="fs-4 mb-0"> ${product.price}
+                                    </h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
                     productList.append(listProduct);
                 }
             }
-
         });
     </script>
-
 </body>
-
 </html>

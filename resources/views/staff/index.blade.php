@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('templates.app')
 
 @section('title', 'Home Page')
 
@@ -9,6 +9,7 @@
 @endsection
 
 @section('content')
+
     <head>
         <meta name="csrf-token" content="{{ csrf_token() }}">
     </head>
@@ -57,7 +58,7 @@
             </div>
         </div>
     </div>
-    
+
     {{-- modal edit --}}
     <div class="modal fade" id="edit" tabindex="-1" aria-labelledby="mySmallModalLabel" aria-hidden="true"
         style="display: none;">

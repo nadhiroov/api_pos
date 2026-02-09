@@ -27,7 +27,7 @@ class Product extends Model
 
     public function getImageUrlAttribute()
     {
-        return $this->image ? asset('storage/' . $this->image) : asset('assets/images/products/empty-shopping-bag.gif');
+        return $this->image ? route('product.image', $this->image) : asset('assets/images/products/empty-shopping-bag.gif');
     }
 
     function category() : BelongsTo {

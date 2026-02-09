@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('templates.app')
 @section('title', 'Home Page')
 
 @section('css')
@@ -79,7 +79,8 @@
                                 <h4 class="card-title fw-semibold">Staff</h4>
                             </div>
                             <div>
-                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-new-staff">Manage</button>
+                                <button class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#add-new-staff">Manage</button>
                             </div>
                         </div>
                         <div class="table-responsive">
