@@ -19,6 +19,7 @@ use App\Http\Controllers\Web\UserManagementWeb;
 use Illuminate\Support\Facades\Cache;
  
 Route::livewire('/ecommerce', 'ecommerce');
+Route::livewire('/checkout', 'checkout');
 
 Route::get('/', [EcommerceController::class, 'index']);
 Route::get('getCategoryByMerchant',[EcommerceController::class, 'getCategory'])->name('getCategoryByMerchant');

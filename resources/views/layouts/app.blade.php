@@ -27,6 +27,8 @@
     </div>
     <div class="dark-transparent sidebartoggler"></div>
     <!-- Import Js Files -->
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js"
+        integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
     <script src="{{ asset('assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ asset('assets/libs/simplebar/dist/simplebar.min.js') }}"></script>
     <script src="{{ asset('assets/js/theme/app.init.js') }}"></script>
@@ -47,7 +49,12 @@
     </script>
     <script src="https://code.jquery.com/jquery-4.0.0.min.js"
         integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+    <script src="{{ asset('assets/libs/jquery-steps/build/jquery.steps.min.js') }}"></script>
+    <script src="{{ asset('assets/libs/jquery-validation/dist/jquery.validate.min.js') }}"></script>
+    <script src="{{ asset('assets/js/forms/form-wizard.js') }}"></script>
+    <script src="{{ asset('assets/js/apps/ecommerce.js') }}"></script>
     @livewireScripts
+    {{-- @stack('scripts') --}}
 </body>
 
 </html>
